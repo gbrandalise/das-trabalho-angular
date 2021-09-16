@@ -6,17 +6,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:apidb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    platform: h2
+    url: jdbc:postgresql:pedidos
+    username: pedidos
+    password: pedidos123
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
