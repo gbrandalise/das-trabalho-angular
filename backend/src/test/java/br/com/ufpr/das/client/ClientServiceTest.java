@@ -90,5 +90,24 @@ public class ClientServiceTest {
         when(clientRepository.findById(200L)).thenReturn(Optional.empty());
         service.findById(200L);
     }
+
+    @Test
+    public void testDeleteById() {
+        Client clientEntity = ClientFactory.getOne("default");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(clientEntity));
+        service.deleteById(1L);
+        verify(clientRepository).deleteById(1L);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteById_IdNull() {
+        service.deleteById(null);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeleteByIdClientNotFound() {
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+        service.deleteById(1L);
+    }
     
 }
