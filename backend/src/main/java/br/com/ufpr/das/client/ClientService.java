@@ -2,6 +2,7 @@ package br.com.ufpr.das.client;
 
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -45,6 +46,15 @@ public class ClientService {
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException("Valores inválidos");
         }
+    }
+
+    public ClientDTO findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+        }
+        Client client = this.clientRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+        return ClientMapper.INSTANCE.toDTO(client);
     }
     
 }
