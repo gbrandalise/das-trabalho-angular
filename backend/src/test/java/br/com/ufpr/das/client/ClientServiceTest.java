@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -46,6 +50,25 @@ public class ClientServiceTest {
     public void testInsertCpfNull() {
         ClientDTO client = ClientDTOFactory.getOne("cpfNull");
         service.insert(client);
+    }
+
+    @Test
+    public void testDeleteById() {
+        Client clientEntity = ClientFactory.getOne("default");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(clientEntity));
+        service.deleteById(1L);
+        verify(clientRepository).deleteById(1L);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteById_IdNull() {
+        service.deleteById(null);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeleteByIdClientNotFound() {
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+        service.deleteById(1L);
     }
     
 }
