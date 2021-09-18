@@ -65,5 +65,18 @@ public class ClientService {
             .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
         return ClientMapper.INSTANCE.toDTO(client);
     }
+
+    public void deleteById(Long id) {
+        this.validateDelete(id);
+        this.clientRepository.deleteById(id);
+    }
+
+    private void validateDelete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        this.clientRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+    }
     
 }
