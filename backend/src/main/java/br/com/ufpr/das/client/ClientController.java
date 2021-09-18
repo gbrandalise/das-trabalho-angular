@@ -1,5 +1,6 @@
 package br.com.ufpr.das.client;
 
+import java.util.List;
 import java.net.URI;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,6 +39,16 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             log.error("Error insert Client ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClientDTO>> findAll() {
+        try {
+            return ResponseEntity.ok(this.clientService.findAll());
+        } catch (Exception e) {
+            log.error("Error findAll Client ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
