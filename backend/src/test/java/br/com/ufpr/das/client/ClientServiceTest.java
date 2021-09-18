@@ -3,10 +3,13 @@ package br.com.ufpr.das.client;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -50,6 +53,23 @@ public class ClientServiceTest {
     public void testInsertCpfNull() {
         ClientDTO client = ClientDTOFactory.getOne("cpfNull");
         service.insert(client);
+    }
+
+    @Test
+    public void testFindAll() {
+        List<Client> clientEntities = ClientFactory.getList(5, "default");
+        when(clientRepository.findAll()).thenReturn(clientEntities);
+        List<ClientDTO> result = service.findAll();
+        assertNotNull(result);
+        assertEquals(5, result.size());
+    }
+
+    @Test
+    public void testFindAllEmptyList() {
+        when(clientRepository.findAll()).thenReturn(Collections.emptyList());
+        List<ClientDTO> result = service.findAll();
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     @Test

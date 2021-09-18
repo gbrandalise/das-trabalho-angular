@@ -4,8 +4,12 @@ package br.com.ufpr.das.client;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -38,7 +42,7 @@ public class ClientControllerTest {
         verify(clientService).insert(client);
         assertNotNull(result.getBody());
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
-        assertEquals(result.getBody().getId(), clientSaved.getId());
+        assertEquals(clientSaved.getId(), result.getBody().getId());
     }
 
     @Test
@@ -55,6 +59,34 @@ public class ClientControllerTest {
         when(clientService.insert(client)).thenThrow(new IllegalArgumentException());
         ResponseEntity<ClientDTO> result = controller.insert(client);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
+    public void testFindAll() {
+        List<ClientDTO> clients = ClientDTOFactory.getList(5, "default");
+        when(clientService.findAll()).thenReturn(clients);
+        ResponseEntity<List<ClientDTO>> result = controller.findAll();
+        verify(clientService).findAll();
+        assertNotNull(result.getBody());
+        assertEquals(5, result.getBody().size());
+    }
+
+    @Test
+    public void testFindAllEmptyList() {
+        when(clientService.findAll()).thenReturn(Collections.emptyList());
+        ResponseEntity<List<ClientDTO>> result = controller.findAll();
+        verify(clientService).findAll();
+        assertNotNull(result.getBody());
+        assertTrue(result.getBody().isEmpty());
+    }
+
+    @Test
+    public void testFindAllGenericException() {
+        when(clientService.findAll()).thenThrow(new RuntimeException());
+        ResponseEntity<List<ClientDTO>> result = controller.findAll();
+        verify(clientService).findAll();
+        assertNull(result.getBody());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
     }
 
     @Test
