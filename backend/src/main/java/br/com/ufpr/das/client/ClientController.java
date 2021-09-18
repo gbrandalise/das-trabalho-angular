@@ -1,9 +1,14 @@
 package br.com.ufpr.das.client;
 
+import java.net.URI;
+
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +30,31 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO client) {
         try {
-            return ResponseEntity.ok(this.clientService.insert(client));
+            ClientDTO clientSaved = this.clientService.insert(client);
+            URI uriClient = URI.create("clients/" + clientSaved.getId());
+            return ResponseEntity.created(uriClient).body(clientSaved);
         } catch (IllegalArgumentException e) {
             log.error("Error insert Client ", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             log.error("Error insert Client ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
+        String errorText = "Error findById Client ";
+        try {
+            return ResponseEntity.ok(this.clientService.findById(id));
+        } catch (IllegalArgumentException e) {
+            log.error(errorText, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (EntityNotFoundException e) {
+            log.error(errorText, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error(errorText, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
