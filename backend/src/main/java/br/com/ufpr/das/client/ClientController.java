@@ -92,7 +92,7 @@ public class ClientController {
     @PutMapping("{id}")
     public ResponseEntity<ClientDTO> update(
         @PathVariable Long id,
-        @RequestBody ClientDTO client
+        @Valid @RequestBody ClientDTO client
     ) {
         String errorMessage = "Error update Client ";
         try {
