@@ -1,6 +1,8 @@
 package br.com.ufpr.das.client;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
@@ -45,6 +47,13 @@ public class ClientService {
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException("Valores inválidos");
         }
+    }
+
+    public List<ClientDTO> findAll() {
+        List<Client> clients = this.clientRepository.findAll();
+        return clients.stream()
+            .map(ClientMapper.INSTANCE::toDTO)
+            .collect(Collectors.toList());
     }
     
 }
