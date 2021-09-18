@@ -78,5 +78,20 @@ public class ClientService {
         this.clientRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
     }
+
+    public ClientDTO update (Long id, ClientDTO client) {
+        validateUpdate(id, client);
+        return this.save(client);
+    }
+
+    private void validateUpdate(Long id, ClientDTO client) {
+        if (id == null
+            || client.getId() == null
+            || !id.equals(client.getId())) {
+            throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados do cliente");
+        }
+        this.clientRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+    }
     
 }

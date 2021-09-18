@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,16 +32,15 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO client) {
+        String errorMessage = "Error insert Client ";
         try {
             ClientDTO clientSaved = this.clientService.insert(client);
             URI uriClient = URI.create("clients/" + clientSaved.getId());
             return ResponseEntity.created(uriClient).body(clientSaved);
         } catch (IllegalArgumentException e) {
-            log.error("Error insert Client ", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("Error insert Client ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,6 +87,32 @@ public class ClientController {
             log.error(errorMessage, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ClientDTO> update(
+        @PathVariable Long id,
+        @Valid @RequestBody ClientDTO client
+    ) {
+        String errorMessage = "Error update Client ";
+        try {
+            return ResponseEntity.ok(this.clientService.update(id, client));
+        } catch (IllegalArgumentException e) {
+            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ResponseEntity<ClientDTO> handleException(
+        String errorMessage, 
+        Exception exception,
+        HttpStatus httpStatus
+    ) {
+        log.error(errorMessage, exception);
+        return ResponseEntity.status(httpStatus).build();
     }
     
 }
