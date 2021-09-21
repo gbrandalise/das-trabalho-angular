@@ -1,0 +1,26 @@
+<h1 nz-typography>Register Client</h1>
+
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your firstName!">
+      <nz-input-group nzPrefixIcon="user">
+        <input type="text" nz-input formControlName="firstName" placeholder="firstName" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your lastName!">
+      <nz-input-group nzPrefixIcon="user">
+        <input type="text" nz-input formControlName="lastName" placeholder="lastName" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your cpf!">
+      <nz-input-group nzPrefixIcon="user">
+        <input type="text" nz-input formControlName="cpf" placeholder="cpf" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+</form>
