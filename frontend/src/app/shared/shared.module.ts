@@ -8,6 +8,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 @NgModule({
   declarations: [],
@@ -22,6 +23,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzInputModule,
     NzButtonModule,
     NzTypographyModule,
+    NzNotificationModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -33,6 +35,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzInputModule,
     NzButtonModule,
     NzTypographyModule,
+    NzNotificationModule,
   ],
 })
 export class SharedModule {}
