@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Client } from 'src/app/shared/models/client.model';
+import { ClientService } from '../../services/client.service';
 
 @Component({
   selector: 'app-client',
@@ -7,27 +10,53 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./client.component.scss'],
 })
 export class ClientComponent implements OnInit {
-  validateForm!: FormGroup;
-
-  submitForm(): void {
-    debugger;
-    for (const i in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(i)) {
-        this.validateForm.controls[i].markAsDirty();
-        this.validateForm.controls[i].updateValueAndValidity();
-      }
-    }
-
-    console.log(this.validateForm.value);
-  }
-
-  constructor(private fb: FormBuilder) {}
+  form!: FormGroup;
+  constructor(
+    private fb: FormBuilder,
+    private service: ClientService,
+    private notification: NzNotificationService
+  ) {}
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
+    this.form = this.fb.group({
       cpf: [null, [Validators.required]],
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
     });
+  }
+
+  save(client: Client): void {
+    this.service.save(client).subscribe(
+      (_client: Client) => {
+        this.notification.create(
+          'success',
+          'Sucesso!',
+          'Cliente salvo com sucesso.'
+        );
+      },
+      (err) => {
+        console.log(err);
+        this.notification.create('error', 'Error', err);
+      }
+    );
+  }
+
+  submitForm(): void {
+    for (const i in this.form.controls) {
+      if (this.form.controls.hasOwnProperty(i)) {
+        this.form.controls[i].markAsDirty();
+        this.form.controls[i].updateValueAndValidity();
+      }
+    }
+
+    if (this.form.invalid) {
+      this.notification.create(
+        'error',
+        'Error',
+        'Por favor verifique seu formulário.'
+      );
+    }
+
+    this.save(this.form.value as Client);
   }
 }
