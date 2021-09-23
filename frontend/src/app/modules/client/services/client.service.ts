@@ -12,9 +12,9 @@ export class ClientService {
 
   save(client: Client): Observable<Client> {
     if (client.id) {
-      return this.http.put<Client>(Endpoints.clientUrl, client);
+      return this.update(client);
     }
-    return this.http.post<Client>(Endpoints.clientUrl, client);
+    return this.create(client);
   }
 
   create(client: Client): Observable<Client> {
@@ -22,6 +22,18 @@ export class ClientService {
   }
 
   update(client: Client): Observable<Client> {
-    return this.http.put<Client>(Endpoints.clientUrl, client);
+    return this.http.put<Client>(`${Endpoints.clientUrl}/${client.id}`, client);
+  }
+
+  getAll(): Observable<Client[]> {
+    return this.http.get<Client[]>(Endpoints.clientUrl);
+  }
+
+  get(id: string): Observable<Client> {
+    return this.http.get<Client>(`${Endpoints.clientUrl}/${id}`);
+  }
+
+  delete(id: string): Observable<Client> {
+    return this.http.delete<Client>(`${Endpoints.clientUrl}/${id}`);
   }
 }

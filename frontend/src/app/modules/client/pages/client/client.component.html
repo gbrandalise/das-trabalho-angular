@@ -1,4 +1,19 @@
-<h1 nz-typography>Register Client</h1>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <a routerLink="/">
+      <i nz-icon nzType="home"></i>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/client">
+      <i nz-icon nzType="user"></i>
+      <span>Lista de clientes</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Cadastrar cliente</nz-breadcrumb-item>
+</nz-breadcrumb>
+
+<h1 nz-typography class="client__title">Cadastrar cliente</h1>
 
 <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
   <nz-form-item>
@@ -22,5 +37,5 @@
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
-  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Salvar</button>
 </form>

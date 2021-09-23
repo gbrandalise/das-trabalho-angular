@@ -7,6 +7,8 @@ import {
   FormOutline,
   DashboardOutline,
   UsergroupAddOutline,
+  DeleteOutline,
+  EditOutline,
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
@@ -15,6 +17,8 @@ const icons = [
   DashboardOutline,
   FormOutline,
   UsergroupAddOutline,
+  DeleteOutline,
+  EditOutline,
 ];
 @NgModule({
   imports: [NzIconModule],

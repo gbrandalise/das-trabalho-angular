@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
   {
     path: 'welcome',
     loadChildren: () =>
@@ -13,10 +12,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/client/client.module').then((m) => m.ClientModule),
   },
+  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
