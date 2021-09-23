@@ -84,8 +84,7 @@
               "browserTarget": "das-angular-front:build:production"
             },
             "development": {
-              "browserTarget": "das-angular-front:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "browserTarget": "das-angular-front:build:development"
             }
           },
           "defaultConfiguration": "development"
