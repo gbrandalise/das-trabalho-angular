@@ -9,8 +9,4 @@ describe('ClientResolver', () => {
     TestBed.configureTestingModule({});
     resolver = TestBed.inject(ClientResolver);
   });
-
-  it('should be created', () => {
-    expect(resolver).toBeTruthy();
-  });
 });
