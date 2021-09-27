@@ -29,11 +29,11 @@ export class ClientService {
     return this.http.get<Client[]>(Endpoints.clientUrl);
   }
 
-  get(id: string): Observable<Client> {
+  get(id: number): Observable<Client> {
     return this.http.get<Client>(`${Endpoints.clientUrl}/${id}`);
   }
 
-  delete(id: string): Observable<Client> {
-    return this.http.delete<Client>(`${Endpoints.clientUrl}/${id}`);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${Endpoints.clientUrl}/${id}`);
   }
 }

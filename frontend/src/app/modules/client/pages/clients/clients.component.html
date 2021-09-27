@@ -35,7 +35,7 @@
           <a *nzSpaceItem routerLink="{{'/client/register/' + data.id}}">
             <button nz-button nzType="primary"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
           </a>
-          <button *nzSpaceItem nz-button nzType="primary" nzDanger (click)="handleDelete(data.id)"><i nz-icon
+          <button *nzSpaceItem nz-button nzType="primary" nzDanger (click)="handleDelete(data.id!)"><i nz-icon
               nzType="delete" nzTheme="outline"></i></button>
         </nz-space>
       </td>

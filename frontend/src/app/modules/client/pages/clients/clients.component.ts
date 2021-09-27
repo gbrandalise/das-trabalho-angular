@@ -37,9 +37,9 @@ export class ClientsComponent implements OnInit {
     );
   }
 
-  handleDelete(id: string | undefined): void {
-    this.service.delete(id || '').subscribe(
-      (_client: Client) => {
+  handleDelete(id: number): void {
+    this.service.delete(id).subscribe(
+      () => {
         this.notification.create(
           'success',
           'Sucesso!',
