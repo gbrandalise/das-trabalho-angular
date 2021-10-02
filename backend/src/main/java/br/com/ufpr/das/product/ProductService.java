@@ -1,8 +1,14 @@
 package br.com.ufpr.das.product;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 
@@ -44,6 +50,22 @@ public class ProductService {
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException("Valores inválidos");
         }
+    }
+
+    public List<ProductDTO> findAll(){
+        List<Product> products = this.productRepository.findAll();
+        return products.stream()
+            .map(ProductMapper.INSTANCE::toDTO)
+            .collect(Collectors.toList());
+
+    }
+
+    public ProductDTO findById(Long id){
+        if(id == null){
+            throw new IllegalArgumentException("ID não deve ser nulo ao buscar um produto");
+        }
+        Product product = this.productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+        return ProductMapper.INSTANCE.toDTO(product);
     }
 
     

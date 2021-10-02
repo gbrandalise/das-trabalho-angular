@@ -1,22 +1,27 @@
 package br.com.ufpr.das.product;
 
 import java.net.URI;
+import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
@@ -37,6 +42,33 @@ public class ProductController {
             return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> findAll(){
+        try {
+            return ResponseEntity.ok(this.productService.findAll());
+        } catch (Exception e) {
+            log.error("Error findAll Product ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
+        String errorText = "Error findById Product ";
+        try {
+            return ResponseEntity.ok(this.productService.findById(id));
+        } catch (IllegalArgumentException e) {
+            log.error(errorText, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (EntityNotFoundException e) {
+            log.error(errorText, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error(errorText, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
