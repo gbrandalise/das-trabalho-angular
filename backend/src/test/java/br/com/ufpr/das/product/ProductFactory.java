@@ -1,5 +1,7 @@
 package br.com.ufpr.das.product;
 
+import java.util.List;
+
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 
@@ -23,6 +25,10 @@ public class ProductFactory {
 
     public static Product getOne(String label) {
         return Fixture.from(Product.class).gimme(label);
+    }
+
+    public static List<Product> getList(int quantity, String label) {
+        return Fixture.from(Product.class).gimme(quantity, label);
     }
     
 }
