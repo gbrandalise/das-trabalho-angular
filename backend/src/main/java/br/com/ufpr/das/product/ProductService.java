@@ -33,9 +33,6 @@ public class ProductService {
         if(product.getId() != null){
             throw new IllegalArgumentException("ID deve ser nulo ao inserir novo produto.");
         }
-        if(product.getDescription() == null) {
-            throw new IllegalArgumentException("Descrição  não deve ser nulo ao inserir novo produto.");
-        }
     }
 
     private ProductDTO save(ProductDTO product){
