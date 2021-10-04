@@ -60,14 +60,11 @@ public class ProductController {
         try {
             return ResponseEntity.ok(this.productService.findById(id));
         } catch (IllegalArgumentException e) {
-            log.error(errorText, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return handleException(errorText, e, HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
-            log.error(errorText, e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return handleException(errorText, e, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error(errorText, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return handleException(errorText, e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
