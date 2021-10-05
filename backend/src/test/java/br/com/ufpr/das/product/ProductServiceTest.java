@@ -54,6 +54,13 @@ public class ProductServiceTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsertDescriptionBlank(){
+        ProductDTO product = ProductDTOFactory.getOne("descriptionBlank");
+        service.insert(product);
+
+    }
+
     @Test
     public void testFindAll() {
         List<Product> productEntities = ProductFactory.getList(5, "default");

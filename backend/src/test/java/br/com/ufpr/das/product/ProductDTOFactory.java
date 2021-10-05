@@ -19,6 +19,10 @@ public class ProductDTOFactory {
             .inherits("idNull", new Rule() {{
                 add("description", null);
             }});
+        Fixture.of(ProductDTO.class).addTemplate("descriptionBlank")
+            .inherits("idNull", new Rule() {{
+                add("description", "");
+        }});
 
     }
 
