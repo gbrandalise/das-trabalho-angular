@@ -10,14 +10,14 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
-@Entity
+@Entity(name = "products")
 @Data
 public class Product implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String description;
-    
+
 }
