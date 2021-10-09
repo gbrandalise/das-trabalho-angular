@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -43,6 +44,15 @@ public class PurchaseOrderService {
     List<PurchaseOrder> clients = this.purchaseOrderRepository.findAll();
     return clients.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
   }
+
+  public PurchaseOrderDTO findById(Long id) {
+    if (id == null) {
+        throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+    }
+    PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+    return PurchaseOrderMapper.INSTANCE.toDTO(purchaseOrder);
+}
 
   private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
     Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation.buildDefaultValidatorFactory().getValidator()
