@@ -1,4 +1,4 @@
-package br.com.ufpr.das.order;
+package br.com.ufpr.das.purchaseOrder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,9 +11,9 @@ import javax.persistence.ManyToOne;
 import br.com.ufpr.das.client.Client;
 import lombok.Data;
 
-@Entity(name = "orders")
+@Entity
 @Data
-public class Order implements Serializable{
+public class PurchaseOrder implements Serializable{
 
   private static final long serialVersionUID = 1L;
 

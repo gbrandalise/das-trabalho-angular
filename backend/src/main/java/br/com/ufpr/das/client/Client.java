@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
-@Entity(name = "clients")
+@Entity
 @Data
 public class Client implements Serializable {
 

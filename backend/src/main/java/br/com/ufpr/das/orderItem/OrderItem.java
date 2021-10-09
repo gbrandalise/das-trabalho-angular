@@ -9,12 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import br.com.ufpr.das.order.Order;
 import br.com.ufpr.das.product.Product;
+import br.com.ufpr.das.purchaseOrder.PurchaseOrder;
 import lombok.Data;
 
 @Data
-@Entity(name = "order_items")
+@Entity
 public class OrderItem implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class OrderItem implements Serializable {
   private Integer quantity;
 
   @ManyToOne
-  private Order order;
+  private PurchaseOrder order;
 
   @ManyToOne
   private Product product;

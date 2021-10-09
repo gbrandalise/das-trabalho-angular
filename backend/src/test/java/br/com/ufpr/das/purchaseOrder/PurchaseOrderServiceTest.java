@@ -1,4 +1,4 @@
-package br.com.ufpr.das.order;
+package br.com.ufpr.das.purchaseOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,13 +13,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OrderServiceTest {
+public class PurchaseOrderServiceTest {
 
   @InjectMocks
-  private OrderService service;
+  private PurchaseOrderService service;
 
   @Mock
-  private OrderRepository orderRepository;
+  private PurchaseOrderRepository orderRepository;
 
   @Test
   public void testInstance() {
@@ -28,10 +28,10 @@ public class OrderServiceTest {
 
   @Test
   public void testInsert() {
-    OrderDTO order = OrderDTOFactory.getOne("idNull");
-    Order orderEntity = OrderFaqctory.getOne("default");
+    PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("idNull");
+    PurchaseOrder orderEntity = PurchaseOrderFaqctory.getOne("default");
     when(orderRepository.save(ArgumentMatchers.any())).thenReturn(orderEntity);
-    OrderDTO result = service.insert(order);
+    PurchaseOrderDTO result = service.insert(order);
     verify(orderRepository).save(ArgumentMatchers.any());
     assertNotNull(result);
     assertEquals(result.getId(), orderEntity.getId());
@@ -39,13 +39,13 @@ public class OrderServiceTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testInsertIdNotNull() {
-    OrderDTO order = OrderDTOFactory.getOne("default");
+    PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("default");
     service.insert(order);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInsertDateNull() {
-    OrderDTO order = OrderDTOFactory.getOne("dateNull");
+    PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("dateNull");
     service.insert(order);
   }
 

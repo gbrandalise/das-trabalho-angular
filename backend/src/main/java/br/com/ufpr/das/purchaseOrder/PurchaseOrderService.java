@@ -1,4 +1,4 @@
-package br.com.ufpr.das.order;
+package br.com.ufpr.das.purchaseOrder;
 
 import java.util.Set;
 
@@ -14,31 +14,31 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OrderService {
+public class PurchaseOrderService {
 
   @NonNull
-  private OrderRepository orderRepository;
+  private PurchaseOrderRepository orderRepository;
 
-  public OrderDTO insert(OrderDTO order) {
+  public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
     return this.save(order);
   }
 
-  private OrderDTO save(OrderDTO order) {
+  private PurchaseOrderDTO save(PurchaseOrderDTO order) {
     this.validate(order);
-    Order orderEntity = OrderMapper.INSTANCE.toEntity(order);
+    PurchaseOrder orderEntity = PurchaseOrderMapper.INSTANCE.toEntity(order);
     orderEntity = this.orderRepository.save(orderEntity);
-    return OrderMapper.INSTANCE.toDTO(orderEntity);
+    return PurchaseOrderMapper.INSTANCE.toDTO(orderEntity);
   }
 
-  private void validateInsert(OrderDTO order) {
+  private void validateInsert(PurchaseOrderDTO order) {
     if (order.getId() != null) {
       throw new IllegalArgumentException("ID deve ser nulo ao inserir novo pedido.");
     }
   }
 
-  private void validate(OrderDTO order) throws IllegalArgumentException {
-    Set<ConstraintViolation<OrderDTO>> violations = Validation
+  private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
+    Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation
                                                               .buildDefaultValidatorFactory()
                                                               .getValidator()
                                                               .validate(order);
