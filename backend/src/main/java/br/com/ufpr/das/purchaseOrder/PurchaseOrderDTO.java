@@ -17,9 +17,6 @@ public class PurchaseOrderDTO {
   private Long id;
 
   @NotNull
-  @JsonFormat(pattern = "dd/MM/yyyy")
-  @JsonDeserialize(using = LocalDateDeserializer.class)
-  @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate date;
   @NotNull
   private Client client;
