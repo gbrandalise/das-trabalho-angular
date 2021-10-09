@@ -28,10 +28,10 @@ public class PurchaseOrderServiceTest {
 
   @Test
   public void testInsert() {
-    PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("idNull");
+    PurchaseOrderDTO purchaseOrder = PurchaseOrderDTOFactory.getOne("idNull");
     PurchaseOrder orderEntity = PurchaseOrderFaqctory.getOne("default");
     when(orderRepository.save(ArgumentMatchers.any())).thenReturn(orderEntity);
-    PurchaseOrderDTO result = service.insert(order);
+    PurchaseOrderDTO result = service.insert(purchaseOrder);
     verify(orderRepository).save(ArgumentMatchers.any());
     assertNotNull(result);
     assertEquals(result.getId(), orderEntity.getId());
