@@ -1,19 +1,21 @@
-package br.com.ufpr.das.order;
+package br.com.ufpr.das.orderItem;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import br.com.ufpr.das.client.Client;
+
+import br.com.ufpr.das.product.Product;
+import br.com.ufpr.das.purchaseOrder.PurchaseOrder;
 import lombok.Data;
 
-@Entity(name = "orders")
 @Data
-public class Order implements Serializable{
+@Entity
+public class OrderItem implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -22,8 +24,11 @@ public class Order implements Serializable{
   private Long id;
 
   @Column(nullable = false)
-  private LocalDate date;
+  private Integer quantity;
 
   @ManyToOne
-  private Client client;
+  private PurchaseOrder order;
+
+  @ManyToOne
+  private Product product;
 }

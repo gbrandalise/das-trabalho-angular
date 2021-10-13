@@ -146,5 +146,4 @@ public class ClientServiceTest {
         when(clientRepository.findById(client.getId())).thenReturn(Optional.empty());
         service.update(client.getId(), client);
     }
-    
 }

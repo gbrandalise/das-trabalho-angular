@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class ProductService {
-    
+
     @NonNull
     private ProductRepository productRepository;
 
@@ -68,5 +68,5 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDTO(product);
     }
 
-    
+
 }

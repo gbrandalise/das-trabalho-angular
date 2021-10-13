@@ -1,0 +1,45 @@
+package br.com.ufpr.das.purchaseOrder;
+
+import java.net.URI;
+
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@RequestMapping("purchase_orders")
+@RequiredArgsConstructor
+@Slf4j
+public class PurchaseOrderController {
+
+  @NonNull
+  private PurchaseOrderService service;
+
+  @PostMapping
+  public ResponseEntity<PurchaseOrderDTO> insert(@Valid @RequestBody PurchaseOrderDTO order) {
+    String errorMessage = "Error insert Order ";
+    try {
+      PurchaseOrderDTO orderSaved = this.service.insert(order);
+      URI uriOrder = URI.create("orders/" + orderSaved.getId());
+      return ResponseEntity.created(uriOrder).body(orderSaved);
+    } catch (IllegalArgumentException e) {
+      return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  private ResponseEntity<PurchaseOrderDTO> handleException(String errorMessage, Exception exception, HttpStatus httpStatus) {
+    log.error(errorMessage, exception);
+    return ResponseEntity.status(httpStatus).build();
+  }
+}
