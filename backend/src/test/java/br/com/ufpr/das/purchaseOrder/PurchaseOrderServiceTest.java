@@ -40,6 +40,7 @@ public class PurchaseOrderServiceTest {
     when(purchaseOrderRepository.save(ArgumentMatchers.any())).thenReturn(orderEntity);
     PurchaseOrderDTO result = service.insert(order);
     verify(purchaseOrderRepository).save(ArgumentMatchers.any());
+
     assertNotNull(result);
     assertEquals(result.getId(), orderEntity.getId());
   }

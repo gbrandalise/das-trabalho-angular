@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
+import br.com.ufpr.das.client.ClientFactory;
 
 public class PurchaseOrderFactory {
   static {
@@ -12,7 +13,7 @@ public class PurchaseOrderFactory {
       {
         add("id", random(Long.class, range(1L, 200L)));
         add("date", LocalDate.now());
-        // add("client", );
+        add("client", ClientFactory.getOne("default"));
       }
     });
   }
