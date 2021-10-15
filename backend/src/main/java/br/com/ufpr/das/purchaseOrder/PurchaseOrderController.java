@@ -1,11 +1,13 @@
 package br.com.ufpr.das.purchaseOrder;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,16 @@ public class PurchaseOrderController {
     } catch (Exception e) {
       return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @GetMapping
+  public ResponseEntity<List<PurchaseOrderDTO>> findAll() {
+      try {
+          return ResponseEntity.ok(this.service.findAll());
+      } catch (Exception e) {
+          log.error("Error findAll PurchaseOrder ", e);
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      }
   }
 
   private ResponseEntity<PurchaseOrderDTO> handleException(String errorMessage, Exception exception, HttpStatus httpStatus) {

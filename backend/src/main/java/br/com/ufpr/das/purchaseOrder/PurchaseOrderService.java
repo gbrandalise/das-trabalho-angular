@@ -1,6 +1,8 @@
 package br.com.ufpr.das.purchaseOrder;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
@@ -17,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class PurchaseOrderService {
 
   @NonNull
-  private PurchaseOrderRepository orderRepository;
+  private PurchaseOrderRepository purchaseOrderRepository;
 
   public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
@@ -27,7 +29,7 @@ public class PurchaseOrderService {
   private PurchaseOrderDTO save(PurchaseOrderDTO order) {
     this.validate(order);
     PurchaseOrder orderEntity = PurchaseOrderMapper.INSTANCE.toEntity(order);
-    orderEntity = this.orderRepository.save(orderEntity);
+    orderEntity = this.purchaseOrderRepository.save(orderEntity);
     return PurchaseOrderMapper.INSTANCE.toDTO(orderEntity);
   }
 
@@ -37,11 +39,14 @@ public class PurchaseOrderService {
     }
   }
 
+  public List<PurchaseOrderDTO> findAll() {
+    List<PurchaseOrder> clients = this.purchaseOrderRepository.findAll();
+    return clients.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
+  }
+
   private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
-    Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation
-                                                              .buildDefaultValidatorFactory()
-                                                              .getValidator()
-                                                              .validate(order);
+    Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation.buildDefaultValidatorFactory().getValidator()
+        .validate(order);
     if (!violations.isEmpty()) {
       throw new IllegalArgumentException("Valores inválidos");
     }
