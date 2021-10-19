@@ -1,0 +1,43 @@
+<nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/">
+        <i nz-icon nzType="home"></i>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Lista de produtos</nz-breadcrumb-item>
+  </nz-breadcrumb>
+  
+  <h1 nz-typography class="products__title">Lista de produtos</h1>
+  
+  <div class="product__register">
+    <a routerLink="#">
+      <button nz-button nzType="primary"><i nz-icon nzType="edit" nzTheme="outline"></i>Novo</button>
+    </a>
+  </div>
+  
+  
+  <nz-table #basicTable [nzData]="products" [nzLoading]="loading">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Descrição</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{data.id}}</td>
+        <td>{{data.description}}</td>
+        <td>
+          <nz-space [nzSize]="size">
+            <a *nzSpaceItem routerLink="#">
+                <button nz-button nzType="primary"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
+            </a>
+            <button *nzSpaceItem nz-button nzType="primary" nzDanger (click)="handleDelete(data.id!)"><i nz-icon
+                nzType="delete" nzTheme="outline"></i></button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  
