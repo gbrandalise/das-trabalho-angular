@@ -12,6 +12,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/client/client.module').then((m) => m.ClientModule),
   },
+  {
+    path: 'product',
+    loadChildren: () =>
+      import('./modules/product/product.module').then((m) => m.ProductModule),
+  },
   { path: '', pathMatch: 'full', redirectTo: '/welcome' },
 ];
 
