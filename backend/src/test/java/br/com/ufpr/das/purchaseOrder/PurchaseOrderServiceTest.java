@@ -93,4 +93,21 @@ public class PurchaseOrderServiceTest {
         service.findById(200L);
     }
 
+  @Test
+  public void testFindByClientCpf() {
+    List<PurchaseOrder> purchaseOrderEntities = PurchaseOrderFactory.getList(5, "default");
+    when(purchaseOrderRepository.findByClientCpf("99999999999")).thenReturn(purchaseOrderEntities);
+    List<PurchaseOrderDTO> result = service.findByClientCpf("99999999999");
+    assertNotNull(result);
+    assertEquals(5, result.size());
+  }
+
+  @Test
+  public void testFindByClientCpfEmptyList() {
+    when(purchaseOrderRepository.findByClientCpf("99999999999")).thenReturn(Collections.emptyList());
+    List<PurchaseOrderDTO> result = service.findByClientCpf("99999999999");
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+  }
+
 }

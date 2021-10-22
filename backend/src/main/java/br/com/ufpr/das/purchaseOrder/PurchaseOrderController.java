@@ -69,6 +69,18 @@ public class PurchaseOrderController {
     }
   }
 
+  @GetMapping("by-cpf/{cpf}")
+  public ResponseEntity<List<PurchaseOrderDTO>> findByClientCpf(
+    @PathVariable String cpf
+  ) {
+    try {
+      return ResponseEntity.ok(this.service.findByClientCpf(cpf));
+    } catch (Exception e) {
+      log.error("Error findByClientCpf PurchaseOrder ", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
   private ResponseEntity<PurchaseOrderDTO> handleException(String errorMessage, Exception exception,
       HttpStatus httpStatus) {
     log.error(errorMessage, exception);
