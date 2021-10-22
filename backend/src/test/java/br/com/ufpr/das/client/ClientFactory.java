@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
+import br.com.ufpr.das.purchaseOrder.PurchaseOrderFactory;
 
 public class ClientFactory {
 
@@ -14,6 +15,10 @@ public class ClientFactory {
             add("firstName", random("client1", "client2", "client3"));
             add("lastName", "${firstName}");
         }});
+        Fixture.of(Client.class).addTemplate("withOrders")
+            .inherits("default", new Rule() {{
+                add("orders", PurchaseOrderFactory.getList(2, "default"));
+            }});
     }
 
     public static Client getOne(String label) {

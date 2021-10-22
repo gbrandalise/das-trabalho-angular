@@ -5,6 +5,7 @@ import java.net.URI;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +78,9 @@ public class ClientController {
         try {
             this.clientService.deleteById(id);
             return ResponseEntity.ok().build();
+        } catch (ValidationException e) {
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error(errorMessage, e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

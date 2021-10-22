@@ -38,7 +38,7 @@ public class PurchaseOrderServiceTest {
     PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("idNull");
     PurchaseOrder orderEntity = PurchaseOrderFactory.getOne("default");
     when(purchaseOrderRepository.save(ArgumentMatchers.any())).thenReturn(orderEntity);
-    PurchaseOrderDTO result = service.insert(purchaseOrder);
+    PurchaseOrderDTO result = service.insert(order);
     verify(purchaseOrderRepository).save(ArgumentMatchers.any());
 
     assertNotNull(result);

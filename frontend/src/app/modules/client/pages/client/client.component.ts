@@ -35,8 +35,6 @@ export class ClientComponent implements OnInit {
       firstName: [this.client.firstName || '', [Validators.required]],
       lastName: [this.client.lastName || '', [Validators.required]],
     });
-
-    console.log(this.client);
   }
 
   ngOnDestroy(): void {
@@ -55,7 +53,7 @@ export class ClientComponent implements OnInit {
         this.router.navigate(['/client']);
       },
       (err) => {
-        console.log(err);
+        console.error(err);
         this.notification.create('error', 'Error', err);
       }
     );

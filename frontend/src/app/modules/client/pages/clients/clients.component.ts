@@ -48,8 +48,8 @@ export class ClientsComponent implements OnInit {
         this.getAll();
       },
       (err) => {
-        console.log(err);
-        this.notification.create('error', 'Error', err);
+        console.error(err.error);
+        this.notification.create('error', 'Error', err.error);
       }
     );
   }

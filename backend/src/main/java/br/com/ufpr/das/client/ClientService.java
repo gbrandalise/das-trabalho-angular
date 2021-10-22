@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class ClientService {
+
+    private static final String ERROR_MESSAGE_NOT_FOUND = "Cliente não encontrado";
 
     @NonNull
     private ClientRepository clientRepository;
@@ -62,7 +65,7 @@ public class ClientService {
             throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
         }
         Client client = this.clientRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+            .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
         return ClientMapper.INSTANCE.toDTO(client);
     }
 
@@ -75,8 +78,16 @@ public class ClientService {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
-        this.clientRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+        Client client = this.clientRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
+        this.hasOrders(client);
+    }
+
+    private void hasOrders(Client client) {
+        if (client.getOrders() != null
+            && !client.getOrders().isEmpty()) {
+            throw new ValidationException("Cliente possui pedidos. Não é possível excluir");
+        }
     }
 
     public ClientDTO update (Long id, ClientDTO client) {
@@ -91,7 +102,7 @@ public class ClientService {
             throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados do cliente");
         }
         this.clientRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+            .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
     }
     
 }
