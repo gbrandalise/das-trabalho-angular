@@ -107,7 +107,7 @@ public class ProductServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testDeleteByIdClientNotFound() {
+    public void testDeleteByIdProductNotFound() {
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
         service.deleteById(1L);
     }
