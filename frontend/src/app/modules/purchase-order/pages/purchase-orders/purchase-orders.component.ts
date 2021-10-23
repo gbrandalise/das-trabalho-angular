@@ -11,11 +11,14 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 })
 export class PurchaseOrdersComponent implements OnInit {
 
+  private findObservable?: Observable<PurchaseOrder[]>;
+
   purchaseOrders: PurchaseOrder[] = [];
   loading = false;
   size = 8;
   cpf: string = "";
-  private findObservable?: Observable<PurchaseOrder[]>;
+  isVisibleOrderItems: boolean = false;
+
 
   constructor(
     private service: PurchaseOrderService,
@@ -54,6 +57,14 @@ export class PurchaseOrdersComponent implements OnInit {
       },
       () => this.loading = false
     );
+  }
+
+  showOrderItems() {
+    this.isVisibleOrderItems = true;
+  }
+
+  hideOrderItems() {
+    this.isVisibleOrderItems = false;
   }
 
 }
