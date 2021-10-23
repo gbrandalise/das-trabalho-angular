@@ -62,4 +62,11 @@ public class PurchaseOrderService {
     }
   }
 
+  public List<PurchaseOrderDTO> findByClientCpf(String cpf) {
+    List<PurchaseOrder> clients = this.purchaseOrderRepository.findByClientCpf(cpf);
+    return clients.stream()
+      .map(PurchaseOrderMapper.INSTANCE::toDTO)
+      .collect(Collectors.toList());
+  }
+
 }
