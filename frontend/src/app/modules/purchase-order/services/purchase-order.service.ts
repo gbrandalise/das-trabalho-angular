@@ -15,4 +15,8 @@ export class PurchaseOrderService {
   findAll(): Observable<PurchaseOrder[]>{
     return this.http.get<PurchaseOrder[]>(Endpoints.purchaseOrderUrl);
   }
+
+  findByClientCpf(cpf: string): Observable<PurchaseOrder[]>{
+    return this.http.get<PurchaseOrder[]>(`${Endpoints.purchaseOrderUrl}/by-cpf/${cpf}`);
+  }
 }
