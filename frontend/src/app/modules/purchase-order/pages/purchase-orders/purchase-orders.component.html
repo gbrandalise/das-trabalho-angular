@@ -1,0 +1,43 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <a routerLink="/">
+      <em nz-icon nzType="home"></em>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Lista de pedidos</nz-breadcrumb-item>
+</nz-breadcrumb>
+<h1 nz-typography class="pedidos-title">Lista de pedidos</h1>
+<div class="pedidos-register">
+  <a routerLink="#">
+    <button nz-button nzType="primary"><em nz-icon nzType="edit" nzTheme="outline"></em>Novo</button>
+  </a>
+</div>
+<nz-table #basicTable [nzData]="purchaseOrders" [nzLoading]="loading">
+  <thead>
+    <tr>
+      <td>Id</td>
+      <td>Data</td>
+      <td>Cliente</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{data.id}}</td>
+      <td>{{data.date | date : 'dd/MM/yyyy'}}</td>
+      <td>{{data.client?.firstName}} {{data.client?.lastName}}</td>
+      <td>
+        <nz-space [nzSize]="size">
+          <a *nzSpaceItem routerLink="#">
+              <button nz-button nzType="primary">
+                <em nz-icon nzType="edit" nzTheme="outline"></em>
+              </button>
+          </a>
+          <button *nzSpaceItem nz-button nzType="primary" nzDanger>
+            <em nz-icon nzType="delete" nzTheme="outline"></em>
+          </button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

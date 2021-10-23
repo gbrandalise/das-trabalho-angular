@@ -17,6 +17,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/product/product.module').then((m) => m.ProductModule),
   },
+  {
+    path: 'purchase-order',
+    loadChildren: () =>
+      import('./modules/purchase-order/purchase-order.module').then((m) => m.PurchaseOrderModule),
+  },
   { path: '', pathMatch: 'full', redirectTo: '/welcome' },
 ];
 

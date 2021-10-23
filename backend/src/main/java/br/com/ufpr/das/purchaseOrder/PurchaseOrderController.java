@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("purchase_orders")
+@RequestMapping("purchase-orders")
 @RequiredArgsConstructor
 @Slf4j
 public class PurchaseOrderController {
