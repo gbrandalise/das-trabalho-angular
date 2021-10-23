@@ -35,13 +35,10 @@ export class ProductsComponent implements OnInit {
       () => {
         this.loading = false;
       }
-
     );
   }
 
   handleDelete(id: number): void {
-
-
     this.service.delete(id).subscribe(
       () => {
         this.notification.create(
