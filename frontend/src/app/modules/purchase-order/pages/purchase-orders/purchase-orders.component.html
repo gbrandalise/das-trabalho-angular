@@ -42,7 +42,7 @@
       <td>{{data.client?.firstName}} {{data.client?.lastName}}</td>
       <td>
         <nz-space [nzSize]="size">
-          <button *nzSpaceItem nz-button nzType="primary" (click)="showOrderItems()">
+          <button *nzSpaceItem nz-button nzType="primary" (click)="showOrderItems(data.id!)">
             <em nz-icon nzType="unordered-list" nzTheme="outline"></em>
           </button>
           <button *nzSpaceItem nz-button nzType="primary">
@@ -59,9 +59,22 @@
 <nz-modal [(nzVisible)]="isVisibleOrderItems" nzTitle="Itens do Pedido"
   (nzOnCancel)="hideOrderItems()">
   <ng-container *nzModalContent>
-    <p>Content one</p>
-    <p>Content two</p>
-    <p>Content three</p>
+    <nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading">
+      <thead>
+        <tr>
+          <td>Id</td>
+          <td>Produto</td>
+          <td>Quantidade</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{data.id}}</td>
+          <td>{{data.product!.description}}</td>
+          <td>{{data.quantity}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
   </ng-container>
   <ng-template [nzModalFooter]>
     <button nz-button nzType="primary" (click)="hideOrderItems()">OK</button>

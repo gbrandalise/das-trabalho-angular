@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable } from 'rxjs';
+import { OrderItemService } from 'src/app/modules/order-item/services/order-item.service';
+import { OrderItem } from 'src/app/shared/models/order-item.model';
 import { PurchaseOrder } from 'src/app/shared/models/purchase-order.model';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 
@@ -18,11 +20,12 @@ export class PurchaseOrdersComponent implements OnInit {
   size = 8;
   cpf: string = "";
   isVisibleOrderItems: boolean = false;
-
+  orderItems: OrderItem[] = [];
 
   constructor(
     private service: PurchaseOrderService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private orderItemService: OrderItemService,
   ) { }
 
   ngOnInit(): void {
@@ -59,8 +62,21 @@ export class PurchaseOrdersComponent implements OnInit {
     );
   }
 
-  showOrderItems() {
+  showOrderItems(orderId: number) {
     this.isVisibleOrderItems = true;
+    this.findOrderItems(orderId);
+  }
+
+  findOrderItems(orderId: number) {
+    this.loading = true;
+    this.orderItemService.findByOrderId(orderId).subscribe(
+      (orderItems: OrderItem[]) => this.orderItems = orderItems,
+      (err) => {
+        console.error(err.error);
+        this.notification.create('error', 'Error', err.error)
+      },
+      () => this.loading = false
+    );
   }
 
   hideOrderItems() {
