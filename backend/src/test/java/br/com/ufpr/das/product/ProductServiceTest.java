@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -89,6 +91,25 @@ public class ProductServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void testFindById_IdNull() {
         service.findById(null);
+    }
+
+    @Test
+    public void testDeleteById() {
+        Product productEntity = ProductFactory.getOne("default");
+        when(productRepository.findById(1L)).thenReturn(Optional.of(productEntity));
+        service.deleteById(1L);
+        verify(productRepository).deleteById(1L);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteById_IdNull() {
+        service.deleteById(null);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeleteByIdClientNotFound() {
+        when(productRepository.findById(1L)).thenReturn(Optional.empty());
+        service.deleteById(1L);
     }
 
 }
