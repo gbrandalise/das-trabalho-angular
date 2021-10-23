@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -107,6 +108,13 @@ public class ClientServiceTest {
     @Test(expected = EntityNotFoundException.class)
     public void testDeleteByIdClientNotFound() {
         when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+        service.deleteById(1L);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testDeleteByIdClientHasOrders() {
+        Client clientEntity = ClientFactory.getOne("withOrders");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(clientEntity));
         service.deleteById(1L);
     }
 
