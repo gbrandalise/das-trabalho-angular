@@ -40,7 +40,22 @@ export class ProductsComponent implements OnInit {
   }
 
   handleDelete(id: number): void {
-    console.log("to do")
+
+
+    this.service.delete(id).subscribe(
+      () => {
+        this.notification.create(
+          'success',
+          'Sucesso!',
+          'Produto excluído com sucesso.'
+        );
+        this.getAll();
+      },
+      (err) => {
+        console.error(err.error);
+        this.notification.create('error', 'Error', err.error);
+      }
+    );
   }
 
 }
