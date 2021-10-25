@@ -8,6 +8,7 @@ import br.com.six2six.fixturefactory.Rule;
 import br.com.ufpr.das.client.ClientFactory;
 
 public class PurchaseOrderFactory {
+  
   static {
     Fixture.of(PurchaseOrder.class).addTemplate("default", new Rule() {
       {

@@ -4,8 +4,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+import br.com.ufpr.das.client.ClientMapper;
+
+@Mapper(uses = {ClientMapper.class})
 public interface PurchaseOrderMapper {
+
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
     PurchaseOrderDTO toDTO(PurchaseOrder entity);

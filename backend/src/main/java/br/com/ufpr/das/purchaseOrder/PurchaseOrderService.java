@@ -41,8 +41,8 @@ public class PurchaseOrderService {
   }
 
   public List<PurchaseOrderDTO> findAll() {
-    List<PurchaseOrder> clients = this.purchaseOrderRepository.findAll();
-    return clients.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findAll();
+    return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
   }
 
   public PurchaseOrderDTO findById(Long id) {
@@ -63,8 +63,8 @@ public class PurchaseOrderService {
   }
 
   public List<PurchaseOrderDTO> findByClientCpf(String cpf) {
-    List<PurchaseOrder> clients = this.purchaseOrderRepository.findByClientCpf(cpf);
-    return clients.stream()
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findByClientCpf(cpf);
+    return purchaseOrders.stream()
       .map(PurchaseOrderMapper.INSTANCE::toDTO)
       .collect(Collectors.toList());
   }
