@@ -36,4 +36,15 @@ describe('ProductService', () => {
     );
     expect(httpSpy.get.calls.count()).toBe(1);
   })
+
+  it('should delete product by id', (done) => {
+    httpSpy.delete.and.returnValue(of(null));
+    service.delete(1).subscribe(
+      () => done(),
+      done.fail
+    );
+    expect(httpSpy.delete.calls.count()).toBe(1);
+  });
+
+
 });
