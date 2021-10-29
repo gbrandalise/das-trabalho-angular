@@ -144,7 +144,7 @@ ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 CREATE TABLE public.purchase_order (
     id bigint NOT NULL,
-    date date NOT NULL,
+    date timestamp NOT NULL,
     client_id bigint
 );
 

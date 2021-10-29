@@ -31,22 +31,39 @@
     </nz-form-control>
   </nz-form-item>
 </form>
-<nz-table #basicTable [nzData]="products" [nzLoading]="loading">
+<form nz-form nzLayout="inline" [formGroup]="formOrderItem" (ngSubmit)="submitFormOrderItem()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Por favor selecione um Produto!">
+      <nz-input-group>
+        <nz-select nzShowSearch formControlName="product" class="select-product" nzPlaceHolder="Produto">
+          <nz-option *ngFor="let product of products" [nzValue]="product" [nzLabel]="product.description!"></nz-option>
+        </nz-select>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Quantidade inválida!">
+      <nz-input-group>
+        <input type="number" nz-input formControlName="quantity" placeholder="Quantidade"
+          class="quantity"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button nzType="primary">
+    <em nz-icon nzType="plus-circle" nzTheme="outline"></em>
+  </button>
+</form>
+<nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading" class="table-order-items">
   <thead>
     <tr>
-      <td></td>
-      <td>Id</td>
-      <td>Descrição</td>
+      <td>Produto</td>
+      <td>Quantidade</td>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of basicTable.data">
-      <td>
-        <label [name]="'product' + data.id" nz-checkbox
-          [(ngModel)]="data.checked" ngDefaultControl></label>
-      </td>
-      <td>{{data.id}}</td>
-      <td>{{data.description}}</td>
+      <td>{{data.product!.description}}</td>
+      <td>{{data.quantity}}</td>
     </tr>
   </tbody>
 </nz-table>

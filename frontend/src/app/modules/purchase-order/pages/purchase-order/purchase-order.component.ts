@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ClientService } from 'src/app/modules/client/services/client.service';
 import { ProductService } from 'src/app/modules/product/services/product.service';
 import { Client } from 'src/app/shared/models/client.model';
+import { OrderItem } from 'src/app/shared/models/order-item.model';
 import { Product } from 'src/app/shared/models/product.model';
 import { PurchaseOrder } from 'src/app/shared/models/purchase-order.model';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -22,6 +23,9 @@ export class PurchaseOrderComponent implements OnInit {
   now: string = new Date().toISOString().slice(0, 16);
   loading: boolean = false;
   products: Product[] = [];
+  orderItems: OrderItem[] = [];
+  orderItem: OrderItem = new OrderItem();
+  formOrderItem!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +40,10 @@ export class PurchaseOrderComponent implements OnInit {
     this.form = this.fb.group({
       client: [null, [Validators.required]],
     });
+    this.formOrderItem = this.fb.group({
+      product: [null, [Validators.required]],
+      quantity: [null, [Validators.required]],
+    })
     this.findAllClients();
     this.findAllProducts();
   }
@@ -57,6 +65,9 @@ export class PurchaseOrderComponent implements OnInit {
   save(purchaseOrderData: PurchaseOrder): void {
     this.service.save(purchaseOrderData).subscribe(
       (_purchaseOrder: PurchaseOrder) => {
+        if (_purchaseOrder.id != null) {
+
+        }
         this.notification.create(
           'success',
           'Sucesso!',
@@ -85,11 +96,52 @@ export class PurchaseOrderComponent implements OnInit {
         'Por favor preencher campos obrigatórios.'
       );
     } else {
-      this.save(this.form.value as PurchaseOrder);
+      if (this.orderItems.length == 0) {
+        this.notification.create(
+          'error',
+          'Error',
+          'Por favor adicionar pelo menos um produto.'
+        );
+      } else {
+        this.save(this.form.value as PurchaseOrder);
+      }
     }
   }
 
   getLabelClient(client: Client): string {
     return `${client.cpf} -  ${client.firstName} ${client.lastName}`;
+  }
+
+  submitFormOrderItem() {
+    for (const i in this.formOrderItem.controls) {
+      if (this.formOrderItem.controls.hasOwnProperty(i)) {
+        this.formOrderItem.controls[i].markAsDirty();
+        this.formOrderItem.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.formOrderItem.invalid) {
+      this.notification.create(
+        'error',
+        'Error',
+        'Por favor preencher campos obrigatórios.'
+      );
+    } else {
+      this.addOrderItem();
+      this.formOrderItem.reset();
+    }
+  }
+
+  addOrderItem() {
+    let orderItem: OrderItem = this.formOrderItem.value as OrderItem;
+    let orderItemInList: OrderItem | undefined = this.orderItems
+      .find(oi => oi.product!.id == orderItem.product!.id);
+    if (orderItemInList) {
+      orderItemInList.quantity! += orderItem.quantity!;
+    } else {
+      this.orderItems = [
+        ...this.orderItems,
+        orderItem
+      ];
+    }
   }
 }

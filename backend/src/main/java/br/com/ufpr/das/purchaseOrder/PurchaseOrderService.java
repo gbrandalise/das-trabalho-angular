@@ -1,5 +1,6 @@
 package br.com.ufpr.das.purchaseOrder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class PurchaseOrderService {
 
   public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
+    order.setDate(LocalDateTime.now());
     return this.save(order);
   }
 
