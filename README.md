@@ -3,7 +3,7 @@
 Na pasta raiz do projeto usar o comando abaixo para criar o container do banco de dados:
 
 ```bash
-docker-compose up -d
+docker-compose up -d .
 ```
 
 ## Backend - Spring Boot
