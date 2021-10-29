@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { forkJoin, Observable } from 'rxjs';
 import { ClientService } from 'src/app/modules/client/services/client.service';
+import { OrderItemService } from 'src/app/modules/order-item/services/order-item.service';
 import { ProductService } from 'src/app/modules/product/services/product.service';
 import { Client } from 'src/app/shared/models/client.model';
 import { OrderItem } from 'src/app/shared/models/order-item.model';
@@ -34,6 +36,7 @@ export class PurchaseOrderComponent implements OnInit {
     private router: Router,
     private clientService: ClientService,
     private productService: ProductService,
+    private orderItemService: OrderItemService,
   ) {}
 
   ngOnInit(): void {
@@ -66,14 +69,20 @@ export class PurchaseOrderComponent implements OnInit {
     this.service.save(purchaseOrderData).subscribe(
       (_purchaseOrder: PurchaseOrder) => {
         if (_purchaseOrder.id != null) {
-
+          let observables: Observable<OrderItem>[] = [];
+          this.orderItems.forEach((orderItem) => {
+            orderItem.order = _purchaseOrder;
+            observables.push(this.orderItemService.save(orderItem));
+          });
+          forkJoin(observables).subscribe(() => {
+            this.notification.create(
+              'success',
+              'Sucesso!',
+              'Pedido salvo com sucesso.'
+            );
+            this.router.navigate(['/purchase-order']);
+          });
         }
-        this.notification.create(
-          'success',
-          'Sucesso!',
-          'Pedido salvo com sucesso.'
-        );
-        this.router.navigate(['/purchase-order']);
       },
       (err) => {
         console.error(err.error);

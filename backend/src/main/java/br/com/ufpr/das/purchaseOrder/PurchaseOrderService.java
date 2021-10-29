@@ -54,7 +54,7 @@ public class PurchaseOrderService {
     PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
     return PurchaseOrderMapper.INSTANCE.toDTO(purchaseOrder);
-}
+  }
 
   private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
     Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation.buildDefaultValidatorFactory().getValidator()

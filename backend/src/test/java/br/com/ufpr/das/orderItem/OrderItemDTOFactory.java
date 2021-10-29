@@ -4,6 +4,8 @@ import java.util.List;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
+import br.com.ufpr.das.product.ProductDTOFactory;
+import br.com.ufpr.das.purchaseOrder.PurchaseOrderDTOFactory;
 
 public class OrderItemDTOFactory {
   static {
@@ -13,6 +15,25 @@ public class OrderItemDTOFactory {
         add("quantity", random(Integer.class, range(1, 3000)));
       }
     });
+    Fixture.of(OrderItemDTO.class).addTemplate("valid")
+      .inherits("default", new Rule() {
+        {
+          add("product", ProductDTOFactory.getOne("default"));
+          add("order", PurchaseOrderDTOFactory.getOne("default"));
+        }
+      });
+    Fixture.of(OrderItemDTO.class).addTemplate("idNull")
+      .inherits("valid", new Rule() {
+        {
+          add("id", null);
+        }
+      });
+    Fixture.of(OrderItemDTO.class).addTemplate("quantityNull")
+      .inherits("default", new Rule() {
+        {
+          add("quantityNull", null);
+        }
+      });
   }
 
   public static OrderItemDTO getOne(String label) {

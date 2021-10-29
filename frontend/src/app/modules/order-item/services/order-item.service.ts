@@ -15,4 +15,15 @@ export class OrderItemService {
   findByOrderId(orderId: number): Observable<OrderItem[]>{
     return this.http.get<OrderItem[]>(`${Endpoints.orderItemUrl}/by-order-id/${orderId}`);
   }
+
+  save(orderItem: OrderItem): Observable<OrderItem> {
+    if (orderItem.id) {
+      // TODO: update order item
+    }
+    return this.create(orderItem);
+  }
+
+  create(orderItem: OrderItem): Observable<OrderItem> {
+    return this.http.post<OrderItem>(Endpoints.orderItemUrl, orderItem);
+  }
 }
