@@ -73,8 +73,8 @@ export class ClientComponent implements OnInit {
         'Error',
         'Por favor verifique seu formulário.'
       );
+    } else {
+      this.save(this.form.value as Client);
     }
-
-    this.save(this.form.value as Client);
   }
 }

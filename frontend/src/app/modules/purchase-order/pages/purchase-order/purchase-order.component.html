@@ -1,0 +1,34 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <a routerLink="/">
+      <em nz-icon nzType="home"></em>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/purchase-order">
+      <em nz-icon nzType="user"></em>
+      <span>Lista de pedidos</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Cadastrar pedido</nz-breadcrumb-item>
+</nz-breadcrumb>
+<h1 nz-typography class="purchase-order-title">Cadastrar pedido</h1>
+<form nz-form [formGroup]="form" class="purchase-order-form" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group>
+        <input type="datetime-local" [disabled]="true" nz-input [value]="now"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Por favor selecione um Cliente!">
+      <nz-input-group>
+        <nz-select nzShowSearch formControlName="client" class="select-client" nzPlaceHolder="Cliente">
+          <nz-option *ngFor="let client of clients" [nzValue]="client" [nzLabel]="getLabelClient(client)"></nz-option>
+        </nz-select>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="purchase-order-form-button purchase-order-form-margin" [nzType]="'primary'">Salvar</button>
+</form>

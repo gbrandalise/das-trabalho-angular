@@ -9,6 +9,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
@@ -32,6 +33,7 @@ import { IconsProviderModule } from '../icons-provider.module';
     NzTableModule,
     NzSpaceModule,
     NzModalModule,
+    NzSelectModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -48,6 +50,7 @@ import { IconsProviderModule } from '../icons-provider.module';
     NzTableModule,
     NzSpaceModule,
     NzModalModule,
+    NzSelectModule,
   ],
 })
 export class SharedModule {}
