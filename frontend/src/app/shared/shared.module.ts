@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -34,6 +35,7 @@ import { IconsProviderModule } from '../icons-provider.module';
     NzSpaceModule,
     NzModalModule,
     NzSelectModule,
+    NzCheckboxModule,
   ],
   exports: [
     ReactiveFormsModule,
@@ -51,6 +53,7 @@ import { IconsProviderModule } from '../icons-provider.module';
     NzSpaceModule,
     NzModalModule,
     NzSelectModule,
+    NzCheckboxModule,
   ],
 })
 export class SharedModule {}

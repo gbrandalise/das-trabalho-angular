@@ -1,6 +1,9 @@
 export class Product{
-    constructor(
-        public id?: number,
-        public description?: string
-    ){}
+
+  public checked?: boolean;
+
+  constructor(
+    public id?: number,
+    public description?: string
+  ){}
 }

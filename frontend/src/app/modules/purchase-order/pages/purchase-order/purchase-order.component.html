@@ -30,5 +30,25 @@
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
-  <button nz-button class="purchase-order-form-button purchase-order-form-margin" [nzType]="'primary'">Salvar</button>
 </form>
+<nz-table #basicTable [nzData]="products" [nzLoading]="loading">
+  <thead>
+    <tr>
+      <td></td>
+      <td>Id</td>
+      <td>Descrição</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>
+        <label [name]="'product' + data.id" nz-checkbox
+          [(ngModel)]="data.checked" ngDefaultControl></label>
+      </td>
+      <td>{{data.id}}</td>
+      <td>{{data.description}}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<button nz-button class="purchase-order-form-button purchase-order-form-margin"
+  nzType="primary" (click)="submitForm()">Salvar</button>

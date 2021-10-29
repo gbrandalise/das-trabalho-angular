@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ClientService } from 'src/app/modules/client/services/client.service';
+import { ProductService } from 'src/app/modules/product/services/product.service';
 import { Client } from 'src/app/shared/models/client.model';
+import { Product } from 'src/app/shared/models/product.model';
 import { PurchaseOrder } from 'src/app/shared/models/purchase-order.model';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 
@@ -18,6 +20,8 @@ export class PurchaseOrderComponent implements OnInit {
   purchaseOrder: PurchaseOrder = new PurchaseOrder();
   clients: Client[] = [];
   now: string = new Date().toISOString().slice(0, 16);
+  loading: boolean = false;
+  products: Product[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -25,6 +29,7 @@ export class PurchaseOrderComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private clientService: ClientService,
+    private productService: ProductService,
   ) {}
 
   ngOnInit(): void {
@@ -32,11 +37,20 @@ export class PurchaseOrderComponent implements OnInit {
       client: [null, [Validators.required]],
     });
     this.findAllClients();
+    this.findAllProducts();
   }
 
   findAllClients() {
     this.clientService.getAll().subscribe(data => {
       this.clients = data;
+    });
+  }
+
+  findAllProducts() {
+    this.loading = true;
+    this.productService.getAll().subscribe(data => {
+      this.loading = false;
+      this.products = data;
     });
   }
 
