@@ -1,13 +1,15 @@
 package br.com.ufpr.das.purchaseOrder;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
 import br.com.ufpr.das.client.Client;
 import lombok.Data;
 
@@ -22,7 +24,7 @@ public class PurchaseOrder implements Serializable{
   private Long id;
 
   @Column(nullable = false)
-  private LocalDate date;
+  private LocalDateTime date;
 
   @ManyToOne
   private Client client;

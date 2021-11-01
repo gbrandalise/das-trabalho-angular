@@ -19,4 +19,15 @@ export class PurchaseOrderService {
   findByClientCpf(cpf: string): Observable<PurchaseOrder[]>{
     return this.http.get<PurchaseOrder[]>(`${Endpoints.purchaseOrderUrl}/by-cpf/${cpf}`);
   }
+
+  save(purchaseOrder: PurchaseOrder): Observable<PurchaseOrder> {
+    if (purchaseOrder.id) {
+      // TODO: update purchase order
+    }
+    return this.create(purchaseOrder);
+  }
+
+  create(purchaseOrder: PurchaseOrder): Observable<PurchaseOrder> {
+    return this.http.post<PurchaseOrder>(Endpoints.purchaseOrderUrl, purchaseOrder);
+  }
 }
