@@ -69,4 +69,16 @@ public class ProductService {
     }
 
 
+    public void deleteById(Long id){
+        this.validateDelete(id);
+        this.productRepository.deleteById(id);
+    }
+
+    private void validateDelete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        this.productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+    }
 }

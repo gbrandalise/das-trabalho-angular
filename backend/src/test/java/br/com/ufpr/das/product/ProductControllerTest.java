@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,6 +98,29 @@ public class ProductControllerTest {
         when(productService.findById(200L)).thenThrow(new EntityNotFoundException());
         ResponseEntity<ProductDTO> result = controller.findById(200L);
         assertNull(result.getBody());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteById() {
+        ResponseEntity<Object> result = controller.deleteById(1L);
+        verify(productService).deleteById(1L);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteById_IdNull() {
+        doThrow(new IllegalArgumentException()).when(productService).deleteById(null);
+        ResponseEntity<Object> result = controller.deleteById(null);
+        verify(productService).deleteById(null);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteByIdProductNotFound() {
+        doThrow(new EntityNotFoundException()).when(productService).deleteById(1000L);
+        ResponseEntity<Object> result = controller.deleteById(1000L);
+        verify(productService).deleteById(1000L);
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 

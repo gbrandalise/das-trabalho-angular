@@ -15,4 +15,8 @@ export class ProductService {
   getAll(): Observable<Product[]>{
     return this.http.get<Product[]>(Endpoints.productUrl);
   }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${Endpoints.productUrl}/${id}`);
+  }
 }

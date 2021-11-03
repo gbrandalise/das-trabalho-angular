@@ -1,9 +1,11 @@
 package br.com.ufpr.das.purchaseOrder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,6 +25,7 @@ public class PurchaseOrderService {
 
   public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
+    order.setDate(LocalDateTime.now());
     return this.save(order);
   }
 
@@ -40,8 +43,17 @@ public class PurchaseOrderService {
   }
 
   public List<PurchaseOrderDTO> findAll() {
-    List<PurchaseOrder> clients = this.purchaseOrderRepository.findAll();
-    return clients.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findAll();
+    return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
+  }
+
+  public PurchaseOrderDTO findById(Long id) {
+    if (id == null) {
+        throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+    }
+    PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+    return PurchaseOrderMapper.INSTANCE.toDTO(purchaseOrder);
   }
 
   private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
@@ -50,6 +62,13 @@ public class PurchaseOrderService {
     if (!violations.isEmpty()) {
       throw new IllegalArgumentException("Valores inválidos");
     }
+  }
+
+  public List<PurchaseOrderDTO> findByClientCpf(String cpf) {
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findByClientCpf(cpf);
+    return purchaseOrders.stream()
+      .map(PurchaseOrderMapper.INSTANCE::toDTO)
+      .collect(Collectors.toList());
   }
 
 }
