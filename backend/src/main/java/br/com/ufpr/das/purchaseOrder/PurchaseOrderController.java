@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,5 +87,27 @@ public class PurchaseOrderController {
       HttpStatus httpStatus) {
     log.error(errorMessage, exception);
     return ResponseEntity.status(httpStatus).build();
+  }
+
+  
+  @DeleteMapping("{id}")
+  public ResponseEntity<Object> deleteById(@PathVariable Long id) {
+      String errorMessage = "Error deleteById Product ";
+      try {
+          this.service.deleteById(id);
+          return ResponseEntity.ok().build();
+      } catch (ValidationException e) {
+          log.error(errorMessage, e);
+          return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
+      } catch (IllegalArgumentException e) {
+          log.error(errorMessage, e);
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      } catch (EntityNotFoundException e) {
+          log.error(errorMessage, e);
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      } catch (Exception e) {
+          log.error(errorMessage, e);
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      }
   }
 }

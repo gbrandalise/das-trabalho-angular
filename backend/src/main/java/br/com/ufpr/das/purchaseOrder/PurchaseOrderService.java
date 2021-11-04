@@ -12,6 +12,8 @@ import javax.validation.Validation;
 
 import org.springframework.stereotype.Service;
 
+import br.com.ufpr.das.orderItem.OrderItem;
+import br.com.ufpr.das.orderItem.OrderItemRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +22,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PurchaseOrderService {
 
+  private static final String ERROR_MESSAGE_NOT_FOUND = "Pedido não encontrado";
+
   @NonNull
   private PurchaseOrderRepository purchaseOrderRepository;
+
+  @NonNull
+  private OrderItemRepository orderItemRepository;
 
   public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
@@ -49,7 +56,7 @@ public class PurchaseOrderService {
 
   public PurchaseOrderDTO findById(Long id) {
     if (id == null) {
-        throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+      throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
     }
     PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
@@ -66,9 +73,22 @@ public class PurchaseOrderService {
 
   public List<PurchaseOrderDTO> findByClientCpf(String cpf) {
     List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findByClientCpf(cpf);
-    return purchaseOrders.stream()
-      .map(PurchaseOrderMapper.INSTANCE::toDTO)
-      .collect(Collectors.toList());
+    return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
+  }
+
+  public void deleteById(Long id) {
+    this.validateDelete(id);
+    List<OrderItem> orderItens = this.orderItemRepository.findByOrderId(id);
+    this.orderItemRepository.deleteAll(orderItens);
+    this.purchaseOrderRepository.deleteById(id);
+  }
+
+  private void validateDelete(Long id) {
+    if (id == null) {
+      throw new IllegalArgumentException("ID não pode ser nulo");
+    }
+    PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
   }
 
 }
