@@ -74,11 +74,26 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
+    public ProductDTO update (Long id, ProductDTO product) {
+        validateUpdate(id, product);
+        return this.save(product);
+    }
+
     private void validateDelete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
         this.productRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+    }
+
+    private void validateUpdate(Long id, ProductDTO product) {
+        if (id == null
+            || product.getId() == null
+            || !id.equals(product.getId())) {
+            throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados de um produto");
+        }
+        this.productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Pedido não endontrado"));
     }
 }
