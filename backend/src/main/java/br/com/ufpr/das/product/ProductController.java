@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class ProductController {
 
     @NonNull
     private ProductService productService;
-    
+
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO product){
         String errorMessage = "Error insert Product ";
@@ -87,8 +88,22 @@ public class ProductController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO product) {
+        String errorMessage = "Error on update produduct.";
+        try {
+            return ResponseEntity.ok(this.productService.update(id, product));
+        } catch (IllegalArgumentException e) {
+            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private ResponseEntity<ProductDTO> handleException(
-        String errorMessage, 
+        String errorMessage,
         Exception exception,
         HttpStatus httpStatus
     ) {

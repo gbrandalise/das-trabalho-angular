@@ -21,7 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest {
-    
+
     @InjectMocks private ProductService service;
 
     @Mock private ProductRepository productRepository;
@@ -110,6 +110,43 @@ public class ProductServiceTest {
     public void testDeleteByIdProductNotFound() {
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
         service.deleteById(1L);
+    }
+
+    @Test
+    public void testUpdate() {
+        ProductDTO product = ProductDTOFactory.getOne("default");
+        Product productEntity = ProductMapper.INSTANCE.toEntity(product);
+        when(productRepository.findById(product.getId())).thenReturn(Optional.of(productEntity));
+        when(productRepository.save(ArgumentMatchers.any())).thenReturn(productEntity);
+        ProductDTO result = service.update(product.getId(), product);
+        verify(productRepository).save(ArgumentMatchers.any());
+        assertNotNull(result);
+        assertEquals(product.getId(), result.getId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateIdDifferentFromParameter() {
+        ProductDTO product = ProductDTOFactory.getOne("default");
+        service.update(1000L, product);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateIdNull() {
+        ProductDTO product = ProductDTOFactory.getOne("default");
+        service.update(null, product);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateClientIdNull() {
+        ProductDTO client = ProductDTOFactory.getOne("idNull");
+        service.update(1000L, client);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testUpdateClientNotFound() {
+        ProductDTO product = ProductDTOFactory.getOne("default");
+        when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
+        service.update(product.getId(), product);
     }
 
 }
