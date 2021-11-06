@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class PurchaseOrder implements Serializable{
+public class PurchaseOrder implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -28,4 +28,5 @@ public class PurchaseOrder implements Serializable{
 
   @ManyToOne
   private Client client;
+
 }
