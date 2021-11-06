@@ -56,7 +56,7 @@ public class PurchaseOrderService {
 
   public PurchaseOrderDTO findById(Long id) {
     if (id == null) {
-      throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+      throw new IllegalArgumentException("ID não deve ser nulo ao buscar um pedido");
     }
     PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
