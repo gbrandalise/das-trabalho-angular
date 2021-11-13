@@ -82,5 +82,33 @@ export class PurchaseOrdersComponent implements OnInit {
   hideOrderItems() {
     this.isVisibleOrderItems = false;
   }
-
+  getAll() {
+    this.service.getAll().subscribe(
+      (purchaseOrders: PurchaseOrder[]) =>{
+        this.purchaseOrders =[...purchaseOrders]
+      },
+      (err) =>{
+        this.notification.create('error','Error', err);
+      },
+      ()=>{
+        this.loading=false;
+      }
+    )
+  }
+  handleDelete(id: number): void {
+    this.service.delete(id).subscribe(
+      () => {
+        this.notification.create(
+          'success',
+          'Sucesso!',
+          'Pedido excluído com sucesso.'
+        );
+        this.getAll();
+      },
+      (err) => {
+        console.error(err.error);
+        this.notification.create('error', 'Error', err.error);
+      }
+    );
+  }
 }
