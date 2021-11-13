@@ -1,0 +1,34 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <a routerLink="/">
+      <i nz-icon nzType="home"></i>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/product">
+      <i nz-icon nzType="user"></i>
+      <span>Lista de produtos</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Cadastrar produtos</nz-breadcrumb-item>
+</nz-breadcrumb>
+<h1 nz-typography class="client__title">Cadastrar produto</h1>
+<form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
+
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your id!">
+      <nz-input-group nzPrefixIcon="barcode">
+        <input type="text" nz-input formControlName="id" placeholder="id" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your description!">
+      <nz-input-group nzPrefixIcon="file-text">
+        <input type="text" nz-input formControlName="description" placeholder="description" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Salvar</button>
+</form>
+
