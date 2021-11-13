@@ -30,4 +30,11 @@ export class PurchaseOrderService {
   create(purchaseOrder: PurchaseOrder): Observable<PurchaseOrder> {
     return this.http.post<PurchaseOrder>(Endpoints.purchaseOrderUrl, purchaseOrder);
   }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${Endpoints.purchaseOrderUrl}/${id}`);
+  }
+  getAll(): Observable<PurchaseOrder[]> {
+    return this.http.get<PurchaseOrder[]>(Endpoints.purchaseOrderUrl);
+  }
 }

@@ -45,10 +45,10 @@
           <button *nzSpaceItem nz-button nzType="primary" (click)="showOrderItems(data.id!)">
             <em nz-icon nzType="unordered-list" nzTheme="outline"></em>
           </button>
-          <button *nzSpaceItem nz-button nzType="primary">
+          <button *nzSpaceItem nz-button nzType="primary" routerLink="{{'/purchase-order/register' + data.id}}">
             <em nz-icon nzType="edit" nzTheme="outline"></em>
           </button>
-          <button *nzSpaceItem nz-button nzType="primary" nzDanger>
+          <button *nzSpaceItem nz-button nzType="primary" nzDanger (click)="handleDelete(data.id!)">
             <em nz-icon nzType="delete" nzTheme="outline"></em>
           </button>
         </nz-space>
