@@ -6,16 +6,16 @@
     </nz-breadcrumb-item>
     <nz-breadcrumb-item>Lista de produtos</nz-breadcrumb-item>
   </nz-breadcrumb>
-  
+
   <h1 nz-typography class="products__title">Lista de produtos</h1>
-  
+
   <div class="product__register">
-    <a routerLink="#">
+    <a routerLink="/product/register">
       <button nz-button nzType="primary"><i nz-icon nzType="edit" nzTheme="outline"></i>Novo</button>
     </a>
   </div>
-  
-  
+
+
   <nz-table #basicTable [nzData]="products" [nzLoading]="loading">
     <thead>
       <tr>
@@ -40,4 +40,4 @@
       </tr>
     </tbody>
   </nz-table>
-  
+

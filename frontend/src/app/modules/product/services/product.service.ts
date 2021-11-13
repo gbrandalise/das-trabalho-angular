@@ -9,8 +9,20 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ProductService {
-
   constructor(private http: HttpClient) { }
+
+  save(product: Product): Observable<Product> {
+    if (product.id) {
+      return this.update(product);
+    }
+    return this.create(product);
+  }
+  create(product: Product): Observable<Product> {
+    return this.http.post<Product>(Endpoints.productUrl, product);
+  }
+  update(product: Product): Observable<Product> {
+    return this.http.put<Product>(`${Endpoints.productUrl}/${product.id}`, product);
+  }
 
   getAll(): Observable<Product[]>{
     return this.http.get<Product[]>(Endpoints.productUrl);

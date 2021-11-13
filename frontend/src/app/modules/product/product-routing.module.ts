@@ -1,9 +1,17 @@
 import { ProductsComponent } from './pages/products/products.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ProductComponent } from './pages/product/product.component';
 
 const routes: Routes = [
-    {path: '', component : ProductsComponent}
+  {
+    path: 'register/:id',
+    component: ProductComponent
+  },
+  {path: 'register', component : ProductComponent,
+},
+    {path: '', component : ProductsComponent,
+    }
 ];
 
 @NgModule({
