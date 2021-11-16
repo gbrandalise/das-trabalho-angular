@@ -26,7 +26,7 @@
     </button>
   </nz-space>
 </div>
-<nz-table #basicTable [nzData]="purchaseOrders" [nzLoading]="loading">
+<nz-table #basicTable [nzData]="purchaseOrders" [nzLoading]="loading" [nzPageSize]="5">
   <thead>
     <tr>
       <td>Id</td>
@@ -59,7 +59,7 @@
 <nz-modal [(nzVisible)]="isVisibleOrderItems" nzTitle="Itens do Pedido"
   (nzOnCancel)="hideOrderItems()">
   <ng-container *nzModalContent>
-    <nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading">
+    <nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading" [nzPageSize]="5">
       <thead>
         <tr>
           <td>Id</td>

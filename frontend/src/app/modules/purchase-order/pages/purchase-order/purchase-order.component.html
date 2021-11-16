@@ -53,7 +53,7 @@
     <em nz-icon nzType="plus-circle" nzTheme="outline"></em>
   </button>
 </form>
-<nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading" class="table-order-items">
+<nz-table #basicTable [nzData]="orderItems" [nzLoading]="loading" class="table-order-items" [nzPageSize]="5">
   <thead>
     <tr>
       <td>Produto</td>
