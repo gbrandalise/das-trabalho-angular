@@ -14,18 +14,10 @@
 </nz-breadcrumb>
 <h1 nz-typography class="client__title">Cadastrar produto</h1>
 <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
-
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please input your id!">
-      <nz-input-group nzPrefixIcon="barcode">
-        <input type="text" nz-input formControlName="id" placeholder="id" />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control nzErrorTip="Please input your description!">
+    <nz-form-control nzErrorTip="Por favor informar a Descrição!">
       <nz-input-group nzPrefixIcon="file-text">
-        <input type="text" nz-input formControlName="description" placeholder="description" />
+        <input type="text" nz-input formControlName="description" placeholder="Descrição" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>

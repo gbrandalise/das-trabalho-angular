@@ -31,7 +31,6 @@ export class ProductComponent implements OnInit {
       }
     });
     this.form = this.fb.group({
-      id: [this.product.id || '', [Validators.required]],
       description: [this.product.description || '', [Validators.required]]
     })
   }
