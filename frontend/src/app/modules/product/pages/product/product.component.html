@@ -12,7 +12,7 @@
   </nz-breadcrumb-item>
   <nz-breadcrumb-item>Cadastrar produtos</nz-breadcrumb-item>
 </nz-breadcrumb>
-<h1 nz-typography class="client__title">Cadastrar produto</h1>
+<h1 nz-typography class="client__title">{{product.id? "Editar" : "Cadastrar"}} produto</h1>
 <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
   <nz-form-item>
     <nz-form-control nzErrorTip="Por favor informar a Descrição!">
