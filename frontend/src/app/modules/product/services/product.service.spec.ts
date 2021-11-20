@@ -46,5 +46,17 @@ describe('ProductService', () => {
     expect(httpSpy.delete.calls.count()).toBe(1);
   });
 
+  it('should get product by id', (done) => {
+    httpSpy.get.and.returnValue(of(product));
+    service.get(1).subscribe(
+      result => {
+        expect(result).toEqual(product);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.get.calls.count()).toBe(1);
+  });
+
 
 });

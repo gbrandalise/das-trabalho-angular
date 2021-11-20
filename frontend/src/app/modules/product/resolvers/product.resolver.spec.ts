@@ -9,8 +9,4 @@ describe('ProductResolver', () => {
     TestBed.configureTestingModule({});
     resolver = TestBed.inject(ProductResolver);
   });
-
-  it('should be created', () => {
-    expect(resolver).toBeTruthy();
-  });
 });
