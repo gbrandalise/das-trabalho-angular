@@ -30,7 +30,7 @@
         <td>{{data.description}}</td>
         <td>
           <nz-space [nzSize]="size">
-            <a *nzSpaceItem routerLink="#">
+            <a *nzSpaceItem routerLink="#" routerLink="{{'/product/register/' + data.id}}">
                 <button nz-button nzType="primary"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
             </a>
             <button *nzSpaceItem nz-button nzType="primary" nzDanger (click)="handleDelete(data.id!)"><i nz-icon
