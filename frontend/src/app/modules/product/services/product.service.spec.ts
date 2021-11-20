@@ -58,5 +58,16 @@ describe('ProductService', () => {
     expect(httpSpy.get.calls.count()).toBe(1);
   });
 
+  it('should save old product', (done) => {
+    httpSpy.put.and.returnValue(of(product));
+    service.save(product).subscribe(
+      result => {
+        expect(result).toEqual(product);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.put.calls.count()).toBe(1);
+  });
 
 });
