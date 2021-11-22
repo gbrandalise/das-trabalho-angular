@@ -3,6 +3,7 @@ package br.com.ufpr.das.orderItem;
 import java.net.URI;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,5 +61,20 @@ public class OrderItemController {
         HttpStatus httpStatus) {
       log.error(errorMessage, exception);
       return ResponseEntity.status(httpStatus).build();
+    }
+
+    
+    @PutMapping("{id}")
+    public ResponseEntity<OrderItemDTO> update(@PathVariable Long id, @Valid @RequestBody OrderItemDTO orderItemDTO) {
+        String errorMessage = "Error on update produduct.";
+        try {
+            return ResponseEntity.ok(this.orderItemService.update(id, orderItemDTO));
+        } catch (IllegalArgumentException e) {
+            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

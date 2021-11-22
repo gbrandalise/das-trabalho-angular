@@ -49,6 +49,23 @@ public class PurchaseOrderService {
     }
   }
 
+  public PurchaseOrderDTO update (Long id, PurchaseOrderDTO order) {
+    validateUpdate(id, order);
+    PurchaseOrder orderEntity = PurchaseOrderMapper.INSTANCE.toEntity(order);
+    orderEntity = this.purchaseOrderRepository.save(orderEntity);
+    return PurchaseOrderMapper.INSTANCE.toDTO(orderEntity);
+  }
+
+  private void validateUpdate(Long id, PurchaseOrderDTO order) {
+      if (id == null
+          || order.getId() == null
+          || !id.equals(order.getId())) {
+          throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados do pedido");
+      }
+      this.purchaseOrderRepository.findById(id)
+          .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
+  }
+
   public List<PurchaseOrderDTO> findAll() {
     List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findAll();
     return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());

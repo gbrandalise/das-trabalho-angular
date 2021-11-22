@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,4 +111,21 @@ public class PurchaseOrderController {
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       }
   }
+
+  @PutMapping("{id}")
+    public ResponseEntity<PurchaseOrderDTO> update(
+        @PathVariable Long id,
+        @Valid @RequestBody PurchaseOrderDTO order
+    ) {
+        String errorMessage = "Error update Order ";
+        try {
+            return ResponseEntity.ok(this.service.update(id, order));
+        } catch (IllegalArgumentException e) {
+            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
