@@ -36,7 +36,7 @@
     <nz-form-control nzErrorTip="Por favor selecione um Produto!">
       <nz-input-group>
         <nz-select nzShowSearch formControlName="product" class="select-product" nzPlaceHolder="Produto">
-          <nz-option *ngFor="let product of products" [nzValue]="product" [nzLabel]="product.description!"></nz-option>
+          <nz-option *ngFor="let product of getProducts()" [nzValue]="product" [nzLabel]="product.description!"></nz-option>
         </nz-select>
       </nz-input-group>
     </nz-form-control>
@@ -45,7 +45,7 @@
     <nz-form-control nzErrorTip="Quantidade inválida!">
       <nz-input-group>
         <input type="number" nz-input formControlName="quantity" placeholder="Quantidade"
-          class="quantity"/>
+          class="quantity" min="1"/>
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
@@ -58,12 +58,23 @@
     <tr>
       <td>Produto</td>
       <td>Quantidade</td>
+      <td>&nbsp;</td>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of basicTable.data">
       <td>{{data.product!.description}}</td>
-      <td>{{data.quantity}}</td>
+      <td>
+        <input type="number" nz-input [(ngModel)]="data.quantity" class="quantity" min="1"
+          (change)="changeQuantity(data)"/>
+      </td>
+      <td>
+        <nz-space [nzSize]="size">
+          <button *nzSpaceItem nz-button nzType="primary" (click)="deleteOrderItem(data)">
+            <em nz-icon nzType="delete" nzTheme="outline"></em>
+          </button>
+        </nz-space>
+      </td>
     </tr>
   </tbody>
 </nz-table>
