@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -58,13 +60,13 @@ public class OrderItemServiceTest {
     assertEquals(result.getId(), orderItemEntity.getId());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testInsertIdNotNull() {
     OrderItemDTO order = OrderItemDTOFactory.getOne("default");
     service.insert(order);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testInsertQuantityNull() {
     OrderItemDTO order = OrderItemDTOFactory.getOne("quantityNull");
     service.insert(order);

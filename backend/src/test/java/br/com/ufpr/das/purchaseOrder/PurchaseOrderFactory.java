@@ -1,11 +1,10 @@
 package br.com.ufpr.das.purchaseOrder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
-import br.com.ufpr.das.client.ClientFactory;
 
 public class PurchaseOrderFactory {
   
@@ -13,8 +12,7 @@ public class PurchaseOrderFactory {
     Fixture.of(PurchaseOrder.class).addTemplate("default", new Rule() {
       {
         add("id", random(Long.class, range(1L, 200L)));
-        add("date", LocalDate.now());
-        add("client", ClientFactory.getOne("default"));
+        add("date", LocalDateTime.now());
       }
     });
   }

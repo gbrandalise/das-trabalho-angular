@@ -1,6 +1,7 @@
 package br.com.ufpr.das.client;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class ClientService {
 
     private void validateInsert(ClientDTO client) {
         if (client.getId() != null) {
-            throw new IllegalArgumentException("ID deve ser nulo ao inserir novo cliente");
+            throw new ValidationException("ID deve ser nulo ao inserir novo cliente");
         }
     }
 
@@ -43,13 +44,24 @@ public class ClientService {
         return ClientMapper.INSTANCE.toDTO(clientEntity);
     }
 
-    private void validate(ClientDTO client) throws IllegalArgumentException {
+    private void validate(ClientDTO client) {
         Set<ConstraintViolation<ClientDTO>> violations = Validation
             .buildDefaultValidatorFactory()
             .getValidator()
             .validate(client);
         if (!violations.isEmpty()) {
-            throw new IllegalArgumentException("Valores inválidos");
+            throw new ValidationException("Valores inválidos");
+        }
+        this.validateCpfExists(client);
+    }
+
+    private void validateCpfExists(ClientDTO client) {
+        Optional<Client> clientEntity = this.clientRepository.findByCpf(client.getCpf());
+        if (clientEntity.isPresent()
+            && (client.getId() == null
+                || (client.getId() != null
+                    && client.getId().equals(clientEntity.get().getId())))) {
+            throw new ValidationException("CPF já cadastrado");
         }
     }
 
@@ -62,7 +74,7 @@ public class ClientService {
 
     public ClientDTO findById(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID não deve ser nulo ao buscar um cliente");
+            throw new ValidationException("ID não deve ser nulo ao buscar um cliente");
         }
         Client client = this.clientRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
@@ -76,7 +88,7 @@ public class ClientService {
 
     private void validateDelete(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID não pode ser nulo");
+            throw new ValidationException("ID não pode ser nulo");
         }
         Client client = this.clientRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
@@ -99,7 +111,7 @@ public class ClientService {
         if (id == null
             || client.getId() == null
             || !id.equals(client.getId())) {
-            throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados do cliente");
+            throw new ValidationException("ID a ser atualizado não corresponde aos dados do cliente");
         }
         this.clientRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));

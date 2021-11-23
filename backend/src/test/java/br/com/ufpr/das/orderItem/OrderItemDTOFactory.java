@@ -31,7 +31,7 @@ public class OrderItemDTOFactory {
     Fixture.of(OrderItemDTO.class).addTemplate("quantityNull")
       .inherits("default", new Rule() {
         {
-          add("quantityNull", null);
+          add("quantity", null);
         }
       });
   }

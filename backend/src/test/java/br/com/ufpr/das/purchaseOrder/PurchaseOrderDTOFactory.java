@@ -5,7 +5,6 @@ import java.util.List;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
-import br.com.ufpr.das.client.ClientDTOFactory;
 
 public class PurchaseOrderDTOFactory {
   static {
@@ -13,7 +12,6 @@ public class PurchaseOrderDTOFactory {
       {
         add("id", random(Long.class, range(1L, 200L)));
         add("date", LocalDateTime.now());
-        add("client", ClientDTOFactory.getOne("default"));
       }
     });
     Fixture.of(PurchaseOrderDTO.class).addTemplate("idNull").inherits("default", new Rule() {

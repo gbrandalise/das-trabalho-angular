@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,10 +88,10 @@ public class ProductControllerTest {
 
     @Test
     public void testFindById_IdNull() {
-        when(productService.findById(null)).thenThrow(new IllegalArgumentException());
+        when(productService.findById(null)).thenThrow(new ValidationException());
         ResponseEntity<ProductDTO> result = controller.findById(null);
         assertNull(result.getBody());
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.PRECONDITION_FAILED, result.getStatusCode());
     }
 
     @Test
@@ -110,10 +111,10 @@ public class ProductControllerTest {
 
     @Test
     public void testDeleteById_IdNull() {
-        doThrow(new IllegalArgumentException()).when(productService).deleteById(null);
+        doThrow(new ValidationException()).when(productService).deleteById(null);
         ResponseEntity<Object> result = controller.deleteById(null);
         verify(productService).deleteById(null);
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals(HttpStatus.PRECONDITION_FAILED, result.getStatusCode());
     }
 
     @Test

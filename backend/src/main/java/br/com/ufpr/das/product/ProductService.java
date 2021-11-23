@@ -1,16 +1,16 @@
 package br.com.ufpr.das.product;
 
-import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
+
+import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class ProductService {
 
     private void validateInsert(ProductDTO product){
         if(product.getId() != null){
-            throw new IllegalArgumentException("ID deve ser nulo ao inserir novo produto.");
+            throw new ValidationException("ID deve ser nulo ao inserir novo produto.");
         }
     }
 
@@ -42,13 +42,13 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDTO(productEntity);
     }
 
-    private void validate(ProductDTO product) throws IllegalArgumentException{
+    private void validate(ProductDTO product) {
         Set<ConstraintViolation<ProductDTO>> violations = Validation
             .buildDefaultValidatorFactory()
             .getValidator()
             .validate(product);
         if (!violations.isEmpty()) {
-            throw new IllegalArgumentException("Valores inválidos");
+            throw new ValidationException("Valores inválidos");
         }
     }
 
@@ -61,8 +61,8 @@ public class ProductService {
     }
 
     public ProductDTO findById(Long id){
-        if(id == null){
-            throw new IllegalArgumentException("ID não deve ser nulo ao buscar um produto");
+        if (id == null) {
+            throw new ValidationException("ID não deve ser nulo ao buscar um produto");
         }
         Product product = this.productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
         return ProductMapper.INSTANCE.toDTO(product);
@@ -81,7 +81,7 @@ public class ProductService {
 
     private void validateDelete(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID não pode ser nulo");
+            throw new ValidationException("ID não pode ser nulo");
         }
         this.productRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
@@ -91,7 +91,7 @@ public class ProductService {
         if (id == null
             || product.getId() == null
             || !id.equals(product.getId())) {
-            throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados de um produto");
+            throw new ValidationException("ID a ser atualizado não corresponde aos dados de um produto");
         }
         this.productRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Pedido não endontrado"));

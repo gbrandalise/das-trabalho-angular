@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,10 +66,10 @@ public class PurchaseOrderControllerTest {
 
   @Test
   public void testFindById_IdNull() {
-    when(purchaseOrderService.findById(null)).thenThrow(new IllegalArgumentException());
+    when(purchaseOrderService.findById(null)).thenThrow(new ValidationException());
     ResponseEntity<PurchaseOrderDTO> result = controller.findById(null);
     assertNull(result.getBody());
-    assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    assertEquals(HttpStatus.PRECONDITION_FAILED, result.getStatusCode());
   }
 
   @Test

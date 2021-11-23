@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,8 @@ public class OrderItemController {
         OrderItemDTO orderSaved = this.orderItemService.insert(orderItem);
         URI uriOrder = URI.create("order-items/" + orderSaved.getId());
         return ResponseEntity.created(uriOrder).body(orderSaved);
-      } catch (IllegalArgumentException e) {
-        return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+      } catch (ValidationException e) {
+        return handleException(errorMessage, e, HttpStatus.PRECONDITION_FAILED);
       } catch (Exception e) {
         return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -69,8 +70,8 @@ public class OrderItemController {
         String errorMessage = "Error on update produduct.";
         try {
             return ResponseEntity.ok(this.orderItemService.update(id, orderItemDTO));
-        } catch (IllegalArgumentException e) {
-            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (ValidationException e) {
+            return handleException(errorMessage, e, HttpStatus.PRECONDITION_FAILED);
         } catch (EntityNotFoundException e) {
             return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
         } catch (Exception e) {

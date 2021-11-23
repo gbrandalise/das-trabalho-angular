@@ -10,7 +10,7 @@ public class ClientDTOFactory {
     static {
         Fixture.of(ClientDTO.class).addTemplate("default", new Rule() {{
             add("id", random(Long.class, range(1L, 200L)));
-            add("cpf", random("60083903003", "17662152030", "31598104020"));
+            add("cpf", random("92153389267", "22203961260", "87542557831"));
             add("firstName", random("client1", "client2", "client3"));
             add("lastName", "${firstName}");
         }});

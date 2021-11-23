@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,20 +44,20 @@ public class ProductServiceTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testInsertIdNotNull(){
         ProductDTO product = ProductDTOFactory.getOne("default");
         service.insert(product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testInsertDescriptionNull(){
         ProductDTO product = ProductDTOFactory.getOne("descriptionNull");
         service.insert(product);
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testInsertDescriptionBlank(){
         ProductDTO product = ProductDTOFactory.getOne("descriptionBlank");
         service.insert(product);
@@ -88,7 +89,7 @@ public class ProductServiceTest {
         assertNotNull(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testFindById_IdNull() {
         service.findById(null);
     }
@@ -101,7 +102,7 @@ public class ProductServiceTest {
         verify(productRepository).deleteById(1L);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testDeleteById_IdNull() {
         service.deleteById(null);
     }
@@ -124,19 +125,19 @@ public class ProductServiceTest {
         assertEquals(product.getId(), result.getId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateIdDifferentFromParameter() {
         ProductDTO product = ProductDTOFactory.getOne("default");
         service.update(1000L, product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateIdNull() {
         ProductDTO product = ProductDTOFactory.getOne("default");
         service.update(null, product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateClientIdNull() {
         ProductDTO client = ProductDTOFactory.getOne("idNull");
         service.update(1000L, client);

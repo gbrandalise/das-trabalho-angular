@@ -9,6 +9,7 @@ public class ClientDTO {
 
     private Long id;
     @NotNull
+    @Cpf
     private String cpf;
     @NotNull
     private String firstName;

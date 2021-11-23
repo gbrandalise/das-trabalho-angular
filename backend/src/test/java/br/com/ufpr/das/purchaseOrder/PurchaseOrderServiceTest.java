@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ValidationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,14 +20,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import br.com.ufpr.das.orderItem.OrderItemRepository;
+
 @RunWith(MockitoJUnitRunner.class)
 public class PurchaseOrderServiceTest {
 
   @InjectMocks
   private PurchaseOrderService service;
 
-  @Mock
-  private PurchaseOrderRepository purchaseOrderRepository;
+  @Mock private PurchaseOrderRepository purchaseOrderRepository;
+  @Mock private OrderItemRepository orderItemrepository;
 
   @Test
   public void testInstance() {
@@ -45,13 +48,13 @@ public class PurchaseOrderServiceTest {
     assertEquals(result.getId(), orderEntity.getId());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testInsertIdNotNull() {
     PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("default");
     service.insert(order);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ValidationException.class)
   public void testInsertDateNull() {
     PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("dateNull");
     service.insert(order);
@@ -82,7 +85,7 @@ public class PurchaseOrderServiceTest {
         assertNotNull(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testFindById_IdNull() {
         service.findById(null);
     }

@@ -9,8 +9,8 @@ import javax.validation.ValidationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,8 +38,8 @@ public class PurchaseOrderController {
       PurchaseOrderDTO orderSaved = this.service.insert(order);
       URI uriOrder = URI.create("orders/" + orderSaved.getId());
       return ResponseEntity.created(uriOrder).body(orderSaved);
-    } catch (IllegalArgumentException e) {
-      return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+    } catch (ValidationException e) {
+      return handleException(errorMessage, e, HttpStatus.PRECONDITION_FAILED);
     } catch (Exception e) {
       return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -60,9 +60,9 @@ public class PurchaseOrderController {
     String errorText = "Error findById Client ";
     try {
       return ResponseEntity.ok(this.service.findById(id));
-    } catch (IllegalArgumentException e) {
+    } catch (ValidationException e) {
       log.error(errorText, e);
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
     } catch (EntityNotFoundException e) {
       log.error(errorText, e);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -100,9 +100,6 @@ public class PurchaseOrderController {
       } catch (ValidationException e) {
           log.error(errorMessage, e);
           return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
-      } catch (IllegalArgumentException e) {
-          log.error(errorMessage, e);
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
       } catch (EntityNotFoundException e) {
           log.error(errorMessage, e);
           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -120,8 +117,8 @@ public class PurchaseOrderController {
         String errorMessage = "Error update Order ";
         try {
             return ResponseEntity.ok(this.service.update(id, order));
-        } catch (IllegalArgumentException e) {
-            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (ValidationException e) {
+            return handleException(errorMessage, e, HttpStatus.PRECONDITION_FAILED);
         } catch (EntityNotFoundException e) {
             return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
         } catch (Exception e) {

@@ -44,13 +44,13 @@ public class ClientServiceTest {
         assertEquals(result.getId(), clientEntity.getId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testInsertIdNotNull() {
         ClientDTO client = ClientDTOFactory.getOne("default");
         service.insert(client);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testInsertCpfNull() {
         ClientDTO client = ClientDTOFactory.getOne("cpfNull");
         service.insert(client);
@@ -81,7 +81,7 @@ public class ClientServiceTest {
         assertNotNull(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testFindById_IdNull() {
         service.findById(null);
     }
@@ -100,7 +100,7 @@ public class ClientServiceTest {
         verify(clientRepository).deleteById(1L);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testDeleteById_IdNull() {
         service.deleteById(null);
     }
@@ -130,19 +130,19 @@ public class ClientServiceTest {
         assertEquals(client.getId(), result.getId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateIdDifferentFromParameter() {
         ClientDTO client = ClientDTOFactory.getOne("default");
         service.update(1000L, client);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateIdNull() {
         ClientDTO client = ClientDTOFactory.getOne("default");
         service.update(null, client);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidationException.class)
     public void testUpdateClientIdNull() {
         ClientDTO client = ClientDTOFactory.getOne("idNull");
         service.update(1000L, client);

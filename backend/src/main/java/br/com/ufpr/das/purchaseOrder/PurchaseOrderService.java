@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
 
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class PurchaseOrderService {
 
   private void validateInsert(PurchaseOrderDTO order) {
     if (order.getId() != null) {
-      throw new IllegalArgumentException("ID deve ser nulo ao inserir novo pedido.");
+      throw new ValidationException("ID deve ser nulo ao inserir novo pedido.");
     }
   }
 
@@ -60,7 +61,7 @@ public class PurchaseOrderService {
       if (id == null
           || order.getId() == null
           || !id.equals(order.getId())) {
-          throw new IllegalArgumentException("ID a ser atualizado não corresponde aos dados do pedido");
+          throw new ValidationException("ID a ser atualizado não corresponde aos dados do pedido");
       }
       this.purchaseOrderRepository.findById(id)
           .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
@@ -73,18 +74,18 @@ public class PurchaseOrderService {
 
   public PurchaseOrderDTO findById(Long id) {
     if (id == null) {
-      throw new IllegalArgumentException("ID não deve ser nulo ao buscar um pedido");
+      throw new ValidationException("ID não deve ser nulo ao buscar um pedido");
     }
     PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+        .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
     return PurchaseOrderMapper.INSTANCE.toDTO(purchaseOrder);
   }
 
-  private void validate(PurchaseOrderDTO order) throws IllegalArgumentException {
+  private void validate(PurchaseOrderDTO order) {
     Set<ConstraintViolation<PurchaseOrderDTO>> violations = Validation.buildDefaultValidatorFactory().getValidator()
         .validate(order);
     if (!violations.isEmpty()) {
-      throw new IllegalArgumentException("Valores inválidos");
+      throw new ValidationException("Valores inválidos");
     }
   }
 
@@ -102,9 +103,9 @@ public class PurchaseOrderService {
 
   private void validateDelete(Long id) {
     if (id == null) {
-      throw new IllegalArgumentException("ID não pode ser nulo");
+      throw new ValidationException("ID não pode ser nulo");
     }
-    PurchaseOrder purchaseOrder = this.purchaseOrderRepository.findById(id)
+    this.purchaseOrderRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(ERROR_MESSAGE_NOT_FOUND));
   }
 

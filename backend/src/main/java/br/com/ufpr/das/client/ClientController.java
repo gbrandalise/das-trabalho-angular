@@ -1,7 +1,7 @@
 package br.com.ufpr.das.client;
 
-import java.util.List;
 import java.net.URI;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -32,16 +32,18 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping
-    public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO client) {
+    public ResponseEntity<Object> insert(@Valid @RequestBody ClientDTO client) {
         String errorMessage = "Error insert Client ";
         try {
             ClientDTO clientSaved = this.clientService.insert(client);
             URI uriClient = URI.create("clients/" + clientSaved.getId());
             return ResponseEntity.created(uriClient).body(clientSaved);
-        } catch (IllegalArgumentException e) {
-            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (ValidationException e) {
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
         } catch (Exception e) {
-            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -60,9 +62,9 @@ public class ClientController {
         String errorText = "Error findById Client ";
         try {
             return ResponseEntity.ok(this.clientService.findById(id));
-        } catch (IllegalArgumentException e) {
+        } catch (ValidationException e) {
             log.error(errorText, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         } catch (EntityNotFoundException e) {
             log.error(errorText, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -81,9 +83,6 @@ public class ClientController {
         } catch (ValidationException e) {
             log.error(errorMessage, e);
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error(errorMessage, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (EntityNotFoundException e) {
             log.error(errorMessage, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -94,29 +93,23 @@ public class ClientController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ClientDTO> update(
+    public ResponseEntity<Object> update(
         @PathVariable Long id,
         @Valid @RequestBody ClientDTO client
     ) {
         String errorMessage = "Error update Client ";
         try {
             return ResponseEntity.ok(this.clientService.update(id, client));
-        } catch (IllegalArgumentException e) {
-            return handleException(errorMessage, e, HttpStatus.BAD_REQUEST);
+        } catch (ValidationException e) {
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-            return handleException(errorMessage, e, HttpStatus.NOT_FOUND);
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return handleException(errorMessage, e, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(errorMessage, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
-
-    private ResponseEntity<ClientDTO> handleException(
-        String errorMessage, 
-        Exception exception,
-        HttpStatus httpStatus
-    ) {
-        log.error(errorMessage, exception);
-        return ResponseEntity.status(httpStatus).build();
     }
     
 }
