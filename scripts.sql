@@ -5,7 +5,7 @@
 -- Dumped from database version 13.4 (Debian 13.4-1.pgdg100+1)
 -- Dumped by pg_dump version 13.4
 
--- Started on 2021-10-21 19:39:10 UTC
+-- Started on 2021-11-23 13:18:58 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -144,7 +144,7 @@ ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 CREATE TABLE public.purchase_order (
     id bigint NOT NULL,
-    date timestamp NOT NULL,
+    date timestamp without time zone NOT NULL,
     client_id bigint
 );
 
@@ -270,7 +270,7 @@ ALTER TABLE ONLY public.order_item
     ADD CONSTRAINT fklbn1xgrugcgx68cetsqa6f7px FOREIGN KEY (order_id) REFERENCES public.purchase_order(id);
 
 
--- Completed on 2021-10-21 19:39:10 UTC
+-- Completed on 2021-11-23 13:18:58 UTC
 
 --
 -- PostgreSQL database dump complete
