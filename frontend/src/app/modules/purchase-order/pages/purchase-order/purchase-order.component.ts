@@ -28,6 +28,7 @@ export class PurchaseOrderComponent implements OnInit {
   orderItems: OrderItem[] = [];
   orderItem: OrderItem = new OrderItem();
   formOrderItem!: FormGroup;
+  size = 8;
 
   constructor(
     private fb: FormBuilder,
@@ -142,15 +143,23 @@ export class PurchaseOrderComponent implements OnInit {
 
   addOrderItem() {
     let orderItem: OrderItem = this.formOrderItem.value as OrderItem;
-    let orderItemInList: OrderItem | undefined = this.orderItems
-      .find(oi => oi.product!.id == orderItem.product!.id);
-    if (orderItemInList) {
-      orderItemInList.quantity! += orderItem.quantity!;
-    } else {
-      this.orderItems = [
-        ...this.orderItems,
-        orderItem
-      ];
+    this.orderItems = [
+      ...this.orderItems,
+      orderItem
+    ];
+  }
+
+  getProducts(): Product[] {
+    return this.products.filter(p => !this.orderItems.some(o => o.product!.id == p.id));
+  }
+
+  deleteOrderItem(data: OrderItem) {
+    this.orderItems = this.orderItems.filter(o => o != data);
+  }
+
+  changeQuantity(data: OrderItem) {
+    if (data.quantity! < 1) {
+      data.quantity = 1;
     }
   }
 }
