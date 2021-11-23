@@ -24,9 +24,12 @@
   <nz-form-item>
     <nz-form-control nzErrorTip="Por favor selecione um Cliente!">
       <nz-input-group>
-        <nz-select nzShowSearch formControlName="client" class="select-client" nzPlaceHolder="Cliente">
+        <nz-select nzShowSearch formControlName="client" class="select-client" nzPlaceHolder="Cliente"
+          *ngIf="!purchaseOrder.id">
           <nz-option *ngFor="let client of clients" [nzValue]="client" [nzLabel]="getLabelClient(client)"></nz-option>
         </nz-select>
+        <input type="text" [disabled]="true" nz-input [value]="getLabelClient(purchaseOrder.client!)"
+        *ngIf="purchaseOrder.id"/>
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
