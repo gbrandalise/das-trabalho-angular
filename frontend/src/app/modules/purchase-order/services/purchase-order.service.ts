@@ -38,9 +38,6 @@ export class PurchaseOrderService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${Endpoints.purchaseOrderUrl}/${id}`);
   }
-  getAll(): Observable<PurchaseOrder[]> {
-    return this.http.get<PurchaseOrder[]>(Endpoints.purchaseOrderUrl);
-  }
 
   findById(id: number): Observable<PurchaseOrder> {
     return this.http.get<PurchaseOrder>(`${Endpoints.purchaseOrderUrl}/${id}`);

@@ -50,4 +50,52 @@ describe('PurchaseOrderService', () => {
     );
     expect(httpSpy.get.calls.count()).toBe(1);
   });
+
+  it('should save new order', (done) => {
+    let purchaseOrderToSave: PurchaseOrder = {...purchaseOrder};
+    purchaseOrderToSave.id = undefined;
+    httpSpy.post.and.returnValue(of(purchaseOrder));
+    service.save(purchaseOrderToSave).subscribe(
+      result => {
+        expect(result).toEqual(purchaseOrder);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.post.calls.count()).toBe(1);
+  });
+
+  it('should save old order', (done) => {
+    let purchaseOrderToSave: PurchaseOrder = {...purchaseOrder};
+    httpSpy.put.and.returnValue(of(purchaseOrder));
+    service.save(purchaseOrderToSave).subscribe(
+      result => {
+        expect(result).toEqual(purchaseOrder);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.put.calls.count()).toBe(1);
+  });
+
+  it('should delete order by id', (done) => {
+    httpSpy.delete.and.returnValue(of(null));
+    service.delete(1).subscribe(
+      () => done(),
+      done.fail
+    );
+    expect(httpSpy.delete.calls.count()).toBe(1);
+  });
+
+  it('should get purchase order by id', (done) => {
+    httpSpy.get.and.returnValue(of(purchaseOrder));
+    service.findById(1).subscribe(
+      result => {
+        expect(result).toEqual(purchaseOrder);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.get.calls.count()).toBe(1);
+  });
 });
