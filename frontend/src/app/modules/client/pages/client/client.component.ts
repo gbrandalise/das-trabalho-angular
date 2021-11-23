@@ -54,7 +54,13 @@ export class ClientComponent implements OnInit {
       },
       (err) => {
         console.error(err);
-        this.notification.create('error', 'Error', err);
+        if (err.status === 400) {
+          if (err.error.errors) {
+            this.notification.create('error', 'Error', err.error.errors[0].defaultMessage);
+          }
+        } else {
+          this.notification.create('error', 'Error', err.error);
+        }
       }
     );
   }

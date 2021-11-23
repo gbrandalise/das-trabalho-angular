@@ -31,9 +31,10 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Por favor informar CPF!">
+    <nz-form-control nzErrorTip="Por favor verificar CPF!">
+      <span>Somente números</span>
       <nz-input-group nzPrefixIcon="user">
-        <input type="text" nz-input formControlName="cpf" placeholder="CPF" />
+        <input type="text" nz-input formControlName="cpf" placeholder="CPF" pattern="[0-9]+"/>
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>

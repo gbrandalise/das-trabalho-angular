@@ -60,7 +60,7 @@ public class ClientService {
         if (clientEntity.isPresent()
             && (client.getId() == null
                 || (client.getId() != null
-                    && client.getId().equals(clientEntity.get().getId())))) {
+                    && !client.getId().equals(clientEntity.get().getId())))) {
             throw new ValidationException("CPF já cadastrado");
         }
     }
