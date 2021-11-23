@@ -70,4 +70,18 @@ describe('ProductService', () => {
     expect(httpSpy.put.calls.count()).toBe(1);
   });
 
+  it('should save new product', (done) => {
+    let productToSave: Product = {...product};
+    productToSave.id = undefined;
+    httpSpy.post.and.returnValue(of(product));
+    service.save(productToSave).subscribe(
+      result => {
+        expect(result).toEqual(product);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.post.calls.count()).toBe(1);
+  });
+
 });

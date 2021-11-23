@@ -36,4 +36,18 @@ describe('OrderItemService', () => {
     );
     expect(httpSpy.get.calls.count()).toBe(1);
   });
+
+  it('should save order item', (done) => {
+    let orderItemToSave: OrderItem = {...orderItem};
+    orderItemToSave.id = undefined;
+    httpSpy.post.and.returnValue(of(orderItem));
+    service.save(orderItemToSave).subscribe(
+      result => {
+        expect(result).toEqual(orderItem);
+        done();
+      },
+      done.fail
+    );
+    expect(httpSpy.post.calls.count()).toBe(1);
+  });
 });

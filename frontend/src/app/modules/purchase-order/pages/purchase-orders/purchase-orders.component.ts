@@ -83,7 +83,7 @@ export class PurchaseOrdersComponent implements OnInit {
     this.isVisibleOrderItems = false;
   }
   getAll() {
-    this.service.getAll().subscribe(
+    this.service.findAll().subscribe(
       (purchaseOrders: PurchaseOrder[]) =>{
         this.purchaseOrders =[...purchaseOrders]
       },
