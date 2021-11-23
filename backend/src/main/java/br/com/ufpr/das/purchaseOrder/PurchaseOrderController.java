@@ -57,7 +57,7 @@ public class PurchaseOrderController {
 
   @GetMapping("{id}")
   public ResponseEntity<PurchaseOrderDTO> findById(@PathVariable Long id) {
-    String errorText = "Error findById Client ";
+    String errorText = "Error findById PurchaseOrder ";
     try {
       return ResponseEntity.ok(this.service.findById(id));
     } catch (ValidationException e) {

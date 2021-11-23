@@ -25,11 +25,8 @@ public class PurchaseOrderService {
 
   private static final String ERROR_MESSAGE_NOT_FOUND = "Pedido não encontrado";
 
-  @NonNull
-  private PurchaseOrderRepository purchaseOrderRepository;
-
-  @NonNull
-  private OrderItemRepository orderItemRepository;
+  @NonNull private PurchaseOrderRepository purchaseOrderRepository;
+  @NonNull private OrderItemRepository orderItemRepository;
 
   public PurchaseOrderDTO insert(PurchaseOrderDTO order) {
     this.validateInsert(order);
@@ -53,6 +50,7 @@ public class PurchaseOrderService {
   public PurchaseOrderDTO update (Long id, PurchaseOrderDTO order) {
     validateUpdate(id, order);
     PurchaseOrder orderEntity = PurchaseOrderMapper.INSTANCE.toEntity(order);
+    this.orderItemRepository.deleteByOrderId(id);
     orderEntity = this.purchaseOrderRepository.save(orderEntity);
     return PurchaseOrderMapper.INSTANCE.toDTO(orderEntity);
   }

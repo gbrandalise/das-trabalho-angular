@@ -17,9 +17,6 @@ export class OrderItemService {
   }
 
   save(orderItem: OrderItem): Observable<OrderItem> {
-    if (orderItem.id) {
-      // TODO: update order item
-    }
     return this.create(orderItem);
   }
 
