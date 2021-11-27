@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { forkJoin, Observable } from 'rxjs';
 import { ClientService } from 'src/app/modules/client/services/client.service';
@@ -28,6 +28,7 @@ export class PurchaseOrderComponent implements OnInit {
   orderItems: OrderItem[] = [];
   orderItem: OrderItem = new OrderItem();
   formOrderItem!: FormGroup;
+  size = 8;
 
   constructor(
     private fb: FormBuilder,
@@ -37,11 +38,14 @@ export class PurchaseOrderComponent implements OnInit {
     private clientService: ClientService,
     private productService: ProductService,
     private orderItemService: OrderItemService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      id: [null],
       client: [null, [Validators.required]],
+      date: [null],
     });
     this.formOrderItem = this.fb.group({
       product: [null, [Validators.required]],
@@ -54,6 +58,7 @@ export class PurchaseOrderComponent implements OnInit {
   findAllClients() {
     this.clientService.getAll().subscribe(data => {
       this.clients = data;
+      this.findOrder();
     });
   }
 
@@ -65,12 +70,39 @@ export class PurchaseOrderComponent implements OnInit {
     });
   }
 
+  findOrder() {
+    this.route.data.subscribe((data) => {
+      if (data.purchaseOrder) {
+        this.purchaseOrder = data.purchaseOrder;
+        this.setClient();
+        this.form.setValue(this.purchaseOrder);
+        this.findOrderItemsByOrder();
+      }
+    });
+  }
+
+  setClient() {
+    this.purchaseOrder.client = this.clients.find(c => c.id == this.purchaseOrder.client!.id);
+  }
+
+  findOrderItemsByOrder() {
+    this.orderItemService.findByOrderId(this.purchaseOrder.id!).subscribe(
+      (orderItems: OrderItem[]) => this.orderItems = orderItems,
+      (err) => {
+        console.error(err.error);
+        this.notification.create('error', 'Error', err.error)
+      }
+    );
+  }
+
   save(purchaseOrderData: PurchaseOrder): void {
+    purchaseOrderData.id = this.purchaseOrder.id;
     this.service.save(purchaseOrderData).subscribe(
       (_purchaseOrder: PurchaseOrder) => {
         if (_purchaseOrder.id != null) {
           let observables: Observable<OrderItem>[] = [];
           this.orderItems.forEach((orderItem) => {
+            orderItem.id = undefined;
             orderItem.order = _purchaseOrder;
             observables.push(this.orderItemService.save(orderItem));
           });
@@ -142,15 +174,23 @@ export class PurchaseOrderComponent implements OnInit {
 
   addOrderItem() {
     let orderItem: OrderItem = this.formOrderItem.value as OrderItem;
-    let orderItemInList: OrderItem | undefined = this.orderItems
-      .find(oi => oi.product!.id == orderItem.product!.id);
-    if (orderItemInList) {
-      orderItemInList.quantity! += orderItem.quantity!;
-    } else {
-      this.orderItems = [
-        ...this.orderItems,
-        orderItem
-      ];
+    this.orderItems = [
+      ...this.orderItems,
+      orderItem
+    ];
+  }
+
+  getProducts(): Product[] {
+    return this.products.filter(p => !this.orderItems.some(o => o.product!.id == p.id));
+  }
+
+  deleteOrderItem(data: OrderItem) {
+    this.orderItems = this.orderItems.filter(o => o != data);
+  }
+
+  changeQuantity(data: OrderItem) {
+    if (data.quantity! < 1) {
+      data.quantity = 1;
     }
   }
 }
