@@ -22,3 +22,22 @@ services:
     restart: unless-stopped
     depends_on:
       - database
+  
+  api:
+    container_name: das-api
+    build: ./backend/
+    image: das-angular/api
+    ports:
+      - 8090:8090
+    depends_on:
+      - database
+  
+  web:
+    container_name: das-web
+    build: ./frontend/
+    image: das-angular/web
+    ports:
+      - 4200:80
+    depends_on:
+      - api
+    
