@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import br.com.ufpr.das.client.ClientDTOFactory;
 import br.com.ufpr.das.orderItem.OrderItemRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,6 +40,7 @@ public class PurchaseOrderServiceTest {
   @Test
   public void testInsert() {
     PurchaseOrderDTO order = PurchaseOrderDTOFactory.getOne("idNull");
+    order.setClient(ClientDTOFactory.getOne("default"));
     PurchaseOrder orderEntity = PurchaseOrderFactory.getOne("default");
     when(purchaseOrderRepository.save(ArgumentMatchers.any())).thenReturn(orderEntity);
     PurchaseOrderDTO result = service.insert(order);
