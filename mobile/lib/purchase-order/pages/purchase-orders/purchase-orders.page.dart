@@ -1,12 +1,33 @@
+import 'package:das_angular_mobile/client/client.model.dart';
+import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
+import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class PurchaseOrdersPage extends StatelessWidget {
+class PurchaseOrdersPage extends StatefulWidget {
+
+  const PurchaseOrdersPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _PurchaseOrdersPageState();
+}
+
+class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   
   final _formKey = GlobalKey<FormState>();
 
-  PurchaseOrdersPage({Key? key}) : super(key: key);
+  List<PurchaseOrder> list = [
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +36,14 @@ class PurchaseOrdersPage extends StatelessWidget {
         title: const Text('Purchase Order'),
       ),
       drawer: const Menu(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       body: Column(
         children: [
           const PageTitle('Lista de Pedidos'),
-          Form(            
+          Form(
             key: _formKey,
             child: Container(
               margin: const EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
@@ -39,6 +64,20 @@ class PurchaseOrdersPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                final PurchaseOrder item = list[index];
+                return ListItemCard({
+                  'Id': item.id.toString(),
+                  'Data': DateFormat('dd/MM/yyyy').format(item.date!),
+                  'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
+                });
+              },
             ),
           ),
         ],

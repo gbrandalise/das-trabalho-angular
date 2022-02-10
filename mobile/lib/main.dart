@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/client': (context) => const ClientPage(),
         '/product': (context) => const ProductPage(),
-        '/purchase-order': (context) => PurchaseOrdersPage(),
+        '/purchase-order': (context) => const PurchaseOrdersPage(),
       },
     );
   }
