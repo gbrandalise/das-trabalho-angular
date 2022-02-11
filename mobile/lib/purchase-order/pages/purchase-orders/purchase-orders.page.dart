@@ -1,4 +1,3 @@
-import 'package:das_angular_mobile/client/client.model.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
@@ -43,6 +42,18 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
     });
   }
 
+  _filter() async {
+    String cpf = _cpfController.text;
+    if (cpf.trim() != '') {
+      List<PurchaseOrder> result = await purchaseOrderService.findByClientCpf(cpf);
+      setState(() {
+        _list = result;
+      });
+    } else {
+      _findAll();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +62,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () { },
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -73,7 +84,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     ),
                   ),
                   ElevatedButton.icon(
-                    onPressed: () {}, 
+                    onPressed: () { _filter(); }, 
                     icon: const Icon(Icons.search),
                     label: const Text('Filtrar'),
                   ),

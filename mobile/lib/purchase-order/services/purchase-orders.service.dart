@@ -18,4 +18,16 @@ class PurchaseOrderService {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
+
+  Future<List<PurchaseOrder>> findByClientCpf(String cpf) async {
+    http.Response response = await http.get(
+      Uri.http(Environment.API_URL, '$RESOURCE_URL/by-cpf/$cpf'),
+      headers: Environment.HEADERS
+    );
+    if (response.statusCode == 200) {
+      return PurchaseOrder.fromJsonList(response.body);
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
 }
