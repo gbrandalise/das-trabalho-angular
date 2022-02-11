@@ -3,6 +3,7 @@ import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
+import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,17 +18,30 @@ class PurchaseOrdersPage extends StatefulWidget {
 class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   
   final _formKey = GlobalKey<FormState>();
+  final _cpfController = TextEditingController();
 
-  List<PurchaseOrder> list = [
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-    PurchaseOrder(1, DateTime.now(), Client(firstName: 'teste', lastName: 'teste')),
-  ];
+  final PurchaseOrderService purchaseOrderService = PurchaseOrderService();
+
+  List<PurchaseOrder> _list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _findAll();
+  }
+
+  @override
+  void dispose() {
+    _cpfController.dispose();
+    super.dispose();
+  }
+
+  _findAll() async {
+    List<PurchaseOrder> result = await purchaseOrderService.findAll();
+    setState(() {
+      _list = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +69,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                       decoration: const InputDecoration(
                         hintText: 'CPF do Cliente'
                       ),
+                      controller: _cpfController,
                     ),
                   ),
                   ElevatedButton.icon(
@@ -69,9 +84,9 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-              itemCount: list.length,
+              itemCount: _list.length,
               itemBuilder: (context, index) {
-                final PurchaseOrder item = list[index];
+                final PurchaseOrder item = _list[index];
                 return ListItemCard({
                   'Id': item.id.toString(),
                   'Data': DateFormat('dd/MM/yyyy').format(item.date!),
