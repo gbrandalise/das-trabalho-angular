@@ -20,6 +20,12 @@
             "url": "http://localhost:4200/",
             "webRoot": "${workspaceFolder}/frontend",
             "preLaunchTask": "start"
+        },
+        {
+            "name": "Launch Flutter Application",
+            "request": "launch",
+            "type": "dart",
+            "cwd": "${workspaceFolder}/mobile",
         }
     ]
 }

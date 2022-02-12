@@ -34,16 +34,19 @@ npm start
 
 ## Mobile - Flutter
 
-Caso esteja usando emulador executar o comando para iniciar o emulador:
+Foi criado um arquivo launch.json na pasta .vscode para facilitar o start da aplicação flutter no menu ```Run and Debug``` do VSCode.
+Subindo a aplicação dessa forma é possível debugar dentro do VSCode
 
-```bash
-flutter emulators --launch flutter_emulator
-```
-
-Para executar a versão mobile do projeto deve-se executar o seguinte comando na pasta ```mobile``` do projeto:
+Caso não queira executar direto pela IDE, é possível subir a aplicação usando o seguinte comando dentro da pasta ```mobile```
 
 ```bash
 flutter run
+```
+
+Caso esteja usando emulador executar o comando para iniciar o emulador antes de rodar a aplicação:
+
+```bash
+flutter emulators --launch flutter_emulator
 ```
 
 Para usar o HotReload ou HotRestart, deve-se digitar a tecla ```r``` (HotReload) ou ```R``` (HotRestart) 
