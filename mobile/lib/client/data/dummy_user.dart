@@ -1,0 +1,1 @@
+const DUMMY_USERS = {};
