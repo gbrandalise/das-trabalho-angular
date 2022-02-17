@@ -4,7 +4,7 @@ import 'package:das_angular_mobile/client/views/AddClint.dart';
 import 'package:das_angular_mobile/client/views/client.page.dart';
 import 'package:das_angular_mobile/home/home.page.dart';
 import 'package:das_angular_mobile/product/product.page.dart';
-import 'package:das_angular_mobile/purchase-order/purchase-order.page.dart';
+import 'package:das_angular_mobile/purchase-order/pages/purchase-orders/purchase-orders.page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/client': (context) => ClientPage(),
         '/product': (context) => const ProductPage(),
-        '/purchase-order': (context) => const PurchaseOrderPage(),
+        '/purchase-order': (context) => const PurchaseOrdersPage(),
       },
     ),
     );
