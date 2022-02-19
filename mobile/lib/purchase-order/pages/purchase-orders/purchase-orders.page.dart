@@ -98,11 +98,15 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final PurchaseOrder item = _list[index];
-                return ListItemCard({
-                  'Id': item.id.toString(),
-                  'Data': DateFormat('dd/MM/yyyy').format(item.date!),
-                  'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
-                });
+                return ListItemCard(
+                  {
+                    'Id': item.id.toString(),
+                    'Data': DateFormat('dd/MM/yyyy').format(item.date!),
+                    'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
+                  },
+                  onEdit: () {},
+                  onDelete: () {},
+                );
               },
             ),
           ),
