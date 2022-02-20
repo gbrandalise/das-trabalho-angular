@@ -10,4 +10,5 @@ class User {
     required this.firstName,
     required this.lastName,
   });
+
 }

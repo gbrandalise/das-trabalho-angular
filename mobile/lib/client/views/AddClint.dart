@@ -1,42 +1,63 @@
 
+import 'dart:ffi';
+
 import 'package:das_angular_mobile/client/models/user.dart';
 import 'package:das_angular_mobile/client/provider/users.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddClint extends StatelessWidget {
+class AddClint extends StatefulWidget {
+  @override
+  State<AddClint> createState() => _AddClintState();
   final _formKey = GlobalKey<FormState>();
+
   final Map<String, String> _formData = {};
 
   void _editFormData(User user){
-    if(user != null){
-      _formData['id'] = (user.id ?? 0) as String;
+    if(user != null) {
+      _formData['id'] = user.id!.toString();
       _formData['firstName']= user.firstName;
       _formData['lastName']= user.lastName;
       _formData['cpf']= user.cpf;
     }
   }
+}
+
+class _AddClintState extends State<AddClint> {
+
 
   @override
   Widget build(BuildContext context) {
-    // final User user = ModalRoute.of(context)?.settings.arguments as User; // arrumar esta efitando no editar user
-    //   _editFormData(user);
-
+      final User? user = ModalRoute.of(context)!.settings.arguments as User?;
+      if(user != null) {
+        widget._editFormData(user);
+      }
     return Scaffold(
         appBar: AppBar(
           title: Text("Cadastro de Cliente"),
           actions: [
             IconButton(
                 onPressed: () {
-                  final isValid = _formKey.currentState?.validate();
-                  if (isValid!) {
-                    _formKey.currentState?.save();
+                  final isValidate = widget._formKey.currentState?.validate();
+                  if ( isValidate != null && widget._formData['id'] != null) {
+                    widget._formKey.currentState?.save();
                     Provider.of<Users>(context, listen: false).put(
                       User(
-                        id: (_formData['id'] ?? 0 ) as int ,
-                        firstName: _formData['firstName']!,
-                        lastName: _formData['lastName']!,
-                        cpf: _formData['cpf']!
+                          id: int.parse(widget._formData['id']!),
+                          firstName: widget._formData['firstName']!,
+                          lastName: widget._formData['lastName']!,
+                          cpf: widget._formData['cpf']!
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }else{
+                    widget._formKey.currentState?.save();
+                    Provider.of<Users>(context, listen: false).put(
+                      User(
+                          id: (widget._formData['id'] ?? 0 ) as int,
+                          firstName: widget._formData['firstName']!,
+                          lastName: widget._formData['lastName']!,
+                          cpf: widget._formData['cpf']!
                       ),
                     );
                     Navigator.of(context).pop();
@@ -48,23 +69,41 @@ class AddClint extends StatelessWidget {
         body: Padding(
             padding: EdgeInsets.all(15),
             child: Form(
-              key: _formKey,
+              key: widget._formKey,
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: _formData['firstName'],
+                    initialValue:widget._formData['firstName'],
                     decoration: InputDecoration(labelText: 'Primeiro Nome'),
-                    onSaved: (value) => _formData['firstName'] = value!,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Primeiro Nome não pode ser vazio';
+                    }
+                    return null;
+                  },
+                    onSaved: (value) => widget._formData['firstName'] = value!,
                   ),
                   TextFormField(
-                    initialValue: _formData['lastName'],
+                    initialValue: widget._formData['lastName'],
                     decoration: InputDecoration(labelText: 'Ultimo Nome'),
-                    onSaved: (value) => _formData['lastName'] = value!,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Ultimo Nome não pode ser vazio';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) => widget._formData['lastName'] = value!,
                   ),
                   TextFormField(
-                    initialValue: _formData['cpf'],
+                    initialValue: widget._formData['cpf'],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'CPF não pode ser vazio';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(labelText: 'CPF'),
-                    onSaved: (value) => _formData['cpf'] = value!,
+                    onSaved: (value) => widget._formData['cpf'] = value!,
                   ),
                 ],
               ),

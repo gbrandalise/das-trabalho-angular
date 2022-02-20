@@ -25,7 +25,7 @@ class _ClientPageState extends State<ClientPage>{
               }, icon: Icon(Icons.person_add))
           ],
         ),
-        body: ListView.builder(itemBuilder: (ctx, i) => UserTile(users.byIndex(i)), itemCount: users.count,),
+        body: ListView.builder(itemBuilder: (ctx, i) => UserTile(users.byIndex(i)), itemCount: users.count),
         drawer: const Menu(),
     );
   }
