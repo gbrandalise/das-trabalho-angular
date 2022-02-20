@@ -6,9 +6,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost:35432}/pedidos
-    username: pedidos
-    password: pedidos123
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:35432/pedidos}
+    username: ${JDBC_DATABASE_USERNAME:pedidos}
+    password: ${JDBC_DATABASE_PASSWORD:pedidos123}
     driver-class-name: org.postgresql.Driver
     platform: postgres
   jpa:
