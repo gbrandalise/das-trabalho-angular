@@ -1,5 +1,4 @@
 import 'package:das_angular_mobile/client/components/user_tile.dart';
-import 'package:das_angular_mobile/client/models/user.dart';
 import 'package:das_angular_mobile/client/provider/users.dart';
 import 'package:das_angular_mobile/client/views/AddClint.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';

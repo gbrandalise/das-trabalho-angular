@@ -1,6 +1,5 @@
 import 'package:das_angular_mobile/client/models/user.dart';
 import 'package:das_angular_mobile/client/provider/users.dart';
-import 'package:das_angular_mobile/client/views/AddClint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
