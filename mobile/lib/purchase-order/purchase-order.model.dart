@@ -6,7 +6,7 @@ class PurchaseOrder {
   DateTime? date;
   Client? client;
 
-  PurchaseOrder(this.id, this.date, this.client);
+  PurchaseOrder({this.id, this.date, this.client});
 
   Map<String, dynamic> toMap() {
     return {
@@ -18,9 +18,9 @@ class PurchaseOrder {
 
   static PurchaseOrder fromMap(Map<String, dynamic> map) {
     return PurchaseOrder(
-      map['id'],
-      DateTime.parse(map['date']),
-      Client.fromMap(map['client']),
+      id: map['id'],
+      date: DateTime.parse(map['date']),
+      client: Client.fromMap(map['client']),
     );
   }
   

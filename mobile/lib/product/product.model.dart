@@ -4,10 +4,13 @@ class Product {
   int? id;
   String? description;
 
-  Product(this.id, this.description);
+  Product({this.id, this.description});
 
   static Product fromMap(Map<String, dynamic> map) {
-    return Product(map['id'], map['description']);
+    return Product(
+      id: map['id'], 
+      description: map['description']
+    );
   }
 
   static List<Product> fromJsonList(String json) {
