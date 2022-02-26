@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:das_angular_mobile/client/client.model.dart';
+import 'package:intl/intl.dart';
 
 class PurchaseOrder {
   int? id;
@@ -11,8 +12,8 @@ class PurchaseOrder {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'date': date,
-      'client': client,
+      'date': DateFormat('yyyy-MM-dd hh:mm:ss').format(date!),
+      'client': client!.toMap(),
     };
   }
 

@@ -2,8 +2,9 @@ import 'package:das_angular_mobile/client/client.model.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
+import 'package:das_angular_mobile/order-item/services/order-item.service.dart';
 import 'package:das_angular_mobile/product/product.model.dart';
-import 'package:das_angular_mobile/purchase-order/order-item.model.dart';
+import 'package:das_angular_mobile/order-item/order-item.model.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   final _dateController = TextEditingController();
   final _quantityController = TextEditingController();
 
-  final PurchaseOrderService purchaseOrderService = PurchaseOrderService();
+  final PurchaseOrderService _purchaseOrderService = PurchaseOrderService();
+  final OrderItemService _orderItemService = OrderItemService();
 
   PurchaseOrder _order = PurchaseOrder();
   List<OrderItem> _items = [];
@@ -218,10 +220,35 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
     return null;
   }
 
-  void _save() {
+  void _save() async  {
     if (_formKeyOrder.currentState!.validate()
         && _validateItems()) {
       _order.date = DateTime.now();
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                CircularProgressIndicator(),
+              ],
+            ),
+          );
+        },
+      );
+      try {
+        _order = await _purchaseOrderService.save(_order);
+        if (_order.id != null) {
+          for (var item in _items) {
+            item.order = _order;
+            await _orderItemService.save(item);
+          }
+        }
+      } finally {
+        Navigator.pop(context);
+      }
       _redirectList();
     }
   }
