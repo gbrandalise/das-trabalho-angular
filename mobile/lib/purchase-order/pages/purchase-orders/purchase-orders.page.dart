@@ -1,3 +1,4 @@
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
@@ -36,19 +37,23 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   }
 
   _findAll() async {
+    LoadingService.show(context);
     List<PurchaseOrder> result = await purchaseOrderService.findAll();
     setState(() {
       _list = result;
+      LoadingService.hide(context);
     });
   }
 
   _filter() async {
     String cpf = _cpfController.text;
     if (cpf.trim() != '') {
+      LoadingService.show(context);
       List<PurchaseOrder> result = await purchaseOrderService.findByClientCpf(cpf);
       setState(() {
         _list = result;
       });
+      LoadingService.hide(context);
     } else {
       _findAll();
     }
@@ -62,8 +67,9 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/purchase-order/register');
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/purchase-order/register');
+          _filter();
         },
         child: const Icon(Icons.add),
       ),
@@ -105,6 +111,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     'Id': item.id.toString(),
                     'Data': DateFormat('dd/MM/yyyy').format(item.date!),
                     'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
+                    'CPF Cliente': item.client!.cpf!,
                   },
                   onEdit: () {},
                   onDelete: () {},

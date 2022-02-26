@@ -1,4 +1,5 @@
 import 'package:das_angular_mobile/client/client.model.dart';
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
@@ -38,7 +39,6 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   ];
   List<Product> _products = [
     Product(id: 1, description: 'product 1'),
-    Product(id: 2, description: 'product 2')
   ];
 
   @override
@@ -224,20 +224,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
     if (_formKeyOrder.currentState!.validate()
         && _validateItems()) {
       _order.date = DateTime.now();
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                CircularProgressIndicator(),
-              ],
-            ),
-          );
-        },
-      );
+      LoadingService.show(context);
       try {
         _order = await _purchaseOrderService.save(_order);
         if (_order.id != null) {
@@ -247,7 +234,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
           }
         }
       } finally {
-        Navigator.pop(context);
+        LoadingService.hide(context);
       }
       _redirectList();
     }
