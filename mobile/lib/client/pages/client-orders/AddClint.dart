@@ -14,6 +14,11 @@ class AddClint extends StatefulWidget {
 
 class _AddClintState extends State<AddClint> {
 
+  void _salvar() async{
+    setState(() {
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
