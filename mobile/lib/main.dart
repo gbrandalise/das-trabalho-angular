@@ -1,6 +1,7 @@
 import 'package:das_angular_mobile/client/client.page.dart';
 import 'package:das_angular_mobile/home/home.page.dart';
 import 'package:das_angular_mobile/product/pages/product.page.dart';
+import 'package:das_angular_mobile/purchase-order/pages/purchase-order/purchase-order.page.dart';
 import 'package:das_angular_mobile/purchase-order/pages/purchase-orders/purchase-orders.page.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/client': (context) => const ClientPage(),
         '/product': (context) => const ProductPage(),
         '/purchase-order': (context) => const PurchaseOrdersPage(),
+        '/purchase-order/register': (context) => const PurchaseOrderPage(),
       },
     );
   }

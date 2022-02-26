@@ -64,18 +64,21 @@ class _ListItemCardState extends State<ListItemCard> {
   }
 
   getActions() {
-    List<IconButton> actions = [
-      IconButton(
+    List<IconButton> actions = [];
+    if (widget.onEdit != null) {
+      actions.add(IconButton(
         onPressed: widget.onEdit, 
         icon: const Icon(Icons.edit),
         color:Colors.blue
-      ),
-      IconButton(
+      ));
+    }
+    if (widget.onDelete != null) {
+      actions.add(IconButton(
         onPressed: widget.onDelete, 
         icon: const Icon(Icons.delete_forever),
         color: Colors.red
-      ),
-    ];
+      ));
+    }
     if (widget.additionalActions != null) {
       for (var additionalAction in widget.additionalActions!) {
         actions.add(additionalAction);

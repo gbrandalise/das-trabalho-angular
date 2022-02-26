@@ -62,7 +62,9 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { },
+        onPressed: () {
+          Navigator.pushNamed(context, '/purchase-order/register');
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(
