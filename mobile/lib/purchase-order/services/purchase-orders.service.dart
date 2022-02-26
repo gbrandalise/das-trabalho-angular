@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:das_angular_mobile/common/environment.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +15,7 @@ class PurchaseOrderService {
       headers: Environment.HEADERS
     );
     if (response.statusCode == 200) {
-      return PurchaseOrder.fromJsonList(response.body);
+      return PurchaseOrder.fromJsonList(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
@@ -25,7 +27,7 @@ class PurchaseOrderService {
       headers: Environment.HEADERS
     );
     if (response.statusCode == 200) {
-      return PurchaseOrder.fromJsonList(response.body);
+      return PurchaseOrder.fromJsonList(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
@@ -45,7 +47,7 @@ class PurchaseOrderService {
       body: purchaseOrder.toJson()
     );
     if (response.statusCode == 201) {
-      return PurchaseOrder.fromJson(response.body);
+      return PurchaseOrder.fromJson(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }

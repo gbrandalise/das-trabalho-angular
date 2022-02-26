@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:das_angular_mobile/common/environment.dart';
 import 'package:das_angular_mobile/order-item/order-item.model.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
@@ -14,7 +16,7 @@ class OrderItemService {
       headers: Environment.HEADERS
     );
     if (response.statusCode == 200) {
-      return PurchaseOrder.fromJsonList(response.body);
+      return PurchaseOrder.fromJsonList(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
@@ -31,7 +33,7 @@ class OrderItemService {
       body: orderItem.toJson()
     );
     if (response.statusCode == 201) {
-      return OrderItem.fromJson(response.body);
+      return OrderItem.fromJson(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
