@@ -41,9 +41,10 @@ class PurchaseOrderService {
   Future<PurchaseOrder> create(PurchaseOrder purchaseOrder) async {
     http.Response response = await http.post(
       Uri.http(Environment.API_URL, RESOURCE_URL),
-      headers: Environment.HEADERS
+      headers: Environment.HEADERS,
+      body: purchaseOrder.toJson()
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return PurchaseOrder.fromJson(response.body);
     } else {
       throw Exception('Error code: ${response.statusCode}');
