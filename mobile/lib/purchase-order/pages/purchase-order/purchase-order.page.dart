@@ -8,6 +8,7 @@ import 'package:das_angular_mobile/product/product.model.dart';
 import 'package:das_angular_mobile/order-item/order-item.model.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
+import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -275,7 +276,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
             TextButton(
               child: const Text("OK"),
               onPressed: () {
-                Navigator.popUntil(context, ModalRoute.withName('/purchase-order'));
+                Navigator.popUntil(context, ModalRoute.withName(AppRoutes.PURCHASE_ORDER));
               }
             )
           ]

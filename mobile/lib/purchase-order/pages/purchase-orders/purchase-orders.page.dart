@@ -4,6 +4,7 @@ import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
+import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -68,7 +69,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.pushNamed(context, '/purchase-order/register');
+          await Navigator.pushNamed(context, AppRoutes.PURCHASE_ORDER_REGISTER);
           _filter();
         },
         child: const Icon(Icons.add),

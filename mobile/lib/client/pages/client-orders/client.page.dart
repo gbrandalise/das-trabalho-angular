@@ -2,7 +2,6 @@ import 'package:das_angular_mobile/client/client.model.dart';
 import 'package:das_angular_mobile/client/pages/client-orders/AddClint.dart';
 import 'package:das_angular_mobile/client/services/client.services.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
-import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';

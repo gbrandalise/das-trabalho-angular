@@ -24,15 +24,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: AppRoutes.HOME,
       routes: {
         AppRoutes.HOME: (_) =>  const HomePage(),
-        AppRoutes.CLIENT: (_) => ClientPage(),
+        AppRoutes.CLIENT: (_) => const ClientPage(),
         AppRoutes.PRODUCT: (_) => const ProductPage(),
         AppRoutes.PURCHASE_ORDER: (_) => const PurchaseOrdersPage(),
-        AppRoutes.USER_ADDCLINT: (_) => AddClint()
-        '/purchase-order/register': (context) => const PurchaseOrderPage(),
-        '/purchase-order/register': (context) => const PurchaseOrderPage(),
+        AppRoutes.USER_ADDCLINT: (_) => AddClint(),
+        AppRoutes.PURCHASE_ORDER_REGISTER: (_) => const PurchaseOrderPage(),
       },
     );
   }
