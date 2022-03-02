@@ -1,26 +1,27 @@
 import 'dart:convert';
 import 'package:das_angular_mobile/client/client.model.dart';
+import 'package:intl/intl.dart';
 
 class PurchaseOrder {
   int? id;
   DateTime? date;
   Client? client;
 
-  PurchaseOrder(this.id, this.date, this.client);
+  PurchaseOrder({this.id, this.date, this.client});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'date': date,
-      'client': client,
+      'date': DateFormat('yyyy-MM-dd hh:mm:ss').format(date!),
+      'client': client!.toMap(),
     };
   }
 
   static PurchaseOrder fromMap(Map<String, dynamic> map) {
     return PurchaseOrder(
-      map['id'],
-      DateTime.parse(map['date']),
-      Client.fromMap(map['client']),
+      id: map['id'],
+      date: DateTime.parse(map['date']),
+      client: Client.fromMap(map['client']),
     );
   }
   

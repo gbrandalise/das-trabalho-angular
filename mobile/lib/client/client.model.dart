@@ -6,7 +6,7 @@ class Client {
   String? firstName;
   String? lastName;
 
-  Client(this.id, this.cpf, this.firstName, this.lastName);
+  Client({this.id, this.cpf, this.firstName, this.lastName});
 
   Map<String, dynamic> toMap() {
     return {
@@ -19,10 +19,10 @@ class Client {
 
   static Client fromMap(Map<String, dynamic> map) {
     return Client(
-      map['id'],
-      map['cpf'],
-      map['firstName'],
-      map['lastName'],
+      id: map['id'],
+      cpf: map['cpf'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
     );
   }
   

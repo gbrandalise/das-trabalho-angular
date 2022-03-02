@@ -1,8 +1,10 @@
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
+import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,19 +38,23 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   }
 
   _findAll() async {
+    LoadingService.show(context);
     List<PurchaseOrder> result = await purchaseOrderService.findAll();
     setState(() {
       _list = result;
+      LoadingService.hide(context);
     });
   }
 
   _filter() async {
     String cpf = _cpfController.text;
     if (cpf.trim() != '') {
+      LoadingService.show(context);
       List<PurchaseOrder> result = await purchaseOrderService.findByClientCpf(cpf);
       setState(() {
         _list = result;
       });
+      LoadingService.hide(context);
     } else {
       _findAll();
     }
@@ -58,11 +64,14 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Purchase Order'),
+        title: const Text('Pedido'),
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { },
+        onPressed: () async {
+          await Navigator.pushNamed(context, AppRoutes.PURCHASE_ORDER_REGISTER);
+          _filter();
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -94,7 +103,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final PurchaseOrder item = _list[index];
@@ -103,6 +112,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     'Id': item.id.toString(),
                     'Data': DateFormat('dd/MM/yyyy').format(item.date!),
                     'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
+                    'CPF Cliente': item.client!.cpf!,
                   },
                   onEdit: () {},
                   onDelete: () {},
