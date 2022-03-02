@@ -40,4 +40,5 @@ class Client {
   }
 
   String toJson() => jsonEncode(toMap());
+
 }
