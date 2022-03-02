@@ -21,6 +21,7 @@ class _ClientPageState extends State<ClientPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
+            iconSize: 40,
             onPressed: () {},
           )
         ],

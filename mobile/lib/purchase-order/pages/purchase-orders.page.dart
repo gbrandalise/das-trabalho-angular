@@ -103,7 +103,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final PurchaseOrder item = _list[index];

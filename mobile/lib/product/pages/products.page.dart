@@ -45,7 +45,7 @@ class _ProductsPageState extends State<ProductsPage> {
         const PageTitle('Lista de Produtos'),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
             itemCount: _list.length,
             itemBuilder: (context, index) {
               final Product item = _list[index];

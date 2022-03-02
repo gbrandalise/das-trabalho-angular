@@ -46,6 +46,7 @@ class _ClientsPageState extends State<ClientsPage> {
         const PageTitle('Lista de Clientes'),
         Expanded(
           child: ListView.builder(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
             itemCount: _list.length,
             itemBuilder: (context, index) {
               final Client client = _list[index];
