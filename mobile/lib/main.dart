@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.PURCHASE_ORDER: (_) => const PurchaseOrdersPage(),
         AppRoutes.USER_ADDCLINT: (_) => AddClint()
         '/purchase-order/register': (context) => const PurchaseOrderPage(),
+        '/purchase-order/register': (context) => const PurchaseOrderPage(),
       },
     );
   }
