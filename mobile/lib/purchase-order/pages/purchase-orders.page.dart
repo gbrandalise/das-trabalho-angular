@@ -64,7 +64,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Purchase Order'),
+        title: const Text('Pedido'),
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(

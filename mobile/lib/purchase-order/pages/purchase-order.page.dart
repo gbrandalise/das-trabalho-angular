@@ -1,4 +1,5 @@
 import 'package:das_angular_mobile/client/client.model.dart';
+import 'package:das_angular_mobile/client/services/client.services.dart';
 import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
@@ -6,6 +7,7 @@ import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/order-item/services/order-item.service.dart';
 import 'package:das_angular_mobile/product/product.model.dart';
 import 'package:das_angular_mobile/order-item/order-item.model.dart';
+import 'package:das_angular_mobile/product/services/product.service.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
 import 'package:das_angular_mobile/routes/app_routes.dart';
@@ -30,22 +32,22 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
 
   final PurchaseOrderService _purchaseOrderService = PurchaseOrderService();
   final OrderItemService _orderItemService = OrderItemService();
+  final ClientService _clientService = ClientService();
+  final ProductService _productService = ProductService();
 
+  final List<OrderItem> _items = [];
+  
   PurchaseOrder _order = PurchaseOrder();
-  List<OrderItem> _items = [];
-  OrderItem _item = new OrderItem();
-  List<Client> _clients = [
-    Client(id: 1, cpf: '00000000000', firstName: 'teste', lastName: 'teste'),
-    Client(id: 2, cpf: '11111111111', firstName: 'teste 2', lastName: 'teste 2')
-  ];
-  List<Product> _products = [
-    Product(id: 1, description: 'product 1'),
-  ];
+  OrderItem _item = OrderItem();
+  List<Client> _clients = [];
+  List<Product> _products = [];
 
   @override
   void initState() {
     super.initState();
     _dateController.text = DateFormat('dd/MM/yyyy hh:mm').format(DateTime.now());
+    _findAllClients();
+    _findAllProducts();
   }
 
   @override
@@ -59,7 +61,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Purchase Order'),
+        title: const Text('Pedido'),
         actions: [
           IconButton(
             onPressed: () {
@@ -181,6 +183,20 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
         ],
       ),
     );
+  }
+
+  void _findAllClients() async {
+    var result = await _clientService.findAll();
+    setState(() {
+      _clients = result;
+    });
+  }
+
+  void _findAllProducts() async {
+    var result = await _productService.findAll();
+    setState(() {
+      _products = result;
+    });
   }
 
   String? _validateProduct(Product? value) {

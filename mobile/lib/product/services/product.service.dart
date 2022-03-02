@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:das_angular_mobile/common/environment.dart';
 
 class ProductService {
+  // ignore: constant_identifier_names
   static const String PRODUCT_URL = '/products';
 
   Future<List<Product>> findAll() async {
