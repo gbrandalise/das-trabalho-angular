@@ -21,7 +21,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   final _formKey = GlobalKey<FormState>();
   final _cpfController = TextEditingController();
 
-  final PurchaseOrderService purchaseOrderService = PurchaseOrderService();
+  final PurchaseOrderService _purchaseOrderService = PurchaseOrderService();
 
   List<PurchaseOrder> _list = [];
 
@@ -39,7 +39,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
 
   _findAll() async {
     LoadingService.show(context);
-    List<PurchaseOrder> result = await purchaseOrderService.findAll();
+    List<PurchaseOrder> result = await _purchaseOrderService.findAll();
     setState(() {
       _list = result;
       LoadingService.hide(context);
@@ -50,7 +50,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
     String cpf = _cpfController.text;
     if (cpf.trim() != '') {
       LoadingService.show(context);
-      List<PurchaseOrder> result = await purchaseOrderService.findByClientCpf(cpf);
+      List<PurchaseOrder> result = await _purchaseOrderService.findByClientCpf(cpf);
       setState(() {
         _list = result;
       });
@@ -115,7 +115,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     'CPF Cliente': item.client!.cpf!,
                   },
                   onEdit: () => _edit(item),
-                  onDelete: () {},
+                  onDelete: () => _confirmDelete(item),
                 );
               },
             ),
@@ -131,6 +131,40 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
       AppRoutes.PURCHASE_ORDER_REGISTER, 
       arguments: item
     );
+    _filter();
+  }
+
+  _confirmDelete(PurchaseOrder item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Pedido"),
+          content: const Text("Deseja realmente excluir o pedido?"),
+          actions: [
+            TextButton(
+              child: const Text("Sim"),
+              onPressed: () {
+                Navigator.pop(context);
+                _delete(item);
+              }
+            ),
+            TextButton(
+              child: const Text("Não"),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            )
+          ]
+        );
+      }
+    );
+  }
+
+  _delete(PurchaseOrder item) async {
+    LoadingService.show(context);
+    await _purchaseOrderService.delete(item.id!);
+    LoadingService.hide(context);
     _filter();
   }
 }

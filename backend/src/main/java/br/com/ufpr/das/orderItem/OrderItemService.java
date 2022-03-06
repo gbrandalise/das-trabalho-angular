@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidationException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
@@ -24,7 +25,7 @@ public class OrderItemService {
   private OrderItemRepository orderItemRepository;
 
   public List<OrderItemDTO> findByOrderId(Long orderId) {
-    List<OrderItem> orderItems = this.orderItemRepository.findByOrderId(orderId);
+    List<OrderItem> orderItems = this.orderItemRepository.findByOrderId(orderId, Sort.by(Sort.Direction.ASC, "id"));
     return orderItems.stream().map(OrderItemMapper.INSTANCE::toDTO).collect(Collectors.toList());
   }
 

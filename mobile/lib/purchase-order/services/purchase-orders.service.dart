@@ -63,5 +63,16 @@ class PurchaseOrderService {
       return PurchaseOrder.fromJson(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
-    }}
+    }
+  }
+
+  Future<void> delete(int id) async {
+    http.Response response = await http.delete(
+      Uri.http(Environment.API_URL, '$RESOURCE_URL/$id'),
+      headers: Environment.HEADERS,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
 }

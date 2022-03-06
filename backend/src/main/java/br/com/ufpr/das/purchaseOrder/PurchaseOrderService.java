@@ -11,6 +11,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidationException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.com.ufpr.das.orderItem.OrderItem;
@@ -66,7 +67,7 @@ public class PurchaseOrderService {
   }
 
   public List<PurchaseOrderDTO> findAll() {
-    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findAll();
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
   }
 
@@ -88,13 +89,13 @@ public class PurchaseOrderService {
   }
 
   public List<PurchaseOrderDTO> findByClientCpf(String cpf) {
-    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findByClientCpf(cpf);
+    List<PurchaseOrder> purchaseOrders = this.purchaseOrderRepository.findByClientCpf(cpf, Sort.by(Sort.Direction.ASC, "id"));
     return purchaseOrders.stream().map(PurchaseOrderMapper.INSTANCE::toDTO).collect(Collectors.toList());
   }
 
   public void deleteById(Long id) {
     this.validateDelete(id);
-    List<OrderItem> orderItens = this.orderItemRepository.findByOrderId(id);
+    List<OrderItem> orderItens = this.orderItemRepository.findByOrderId(id, Sort.by(Sort.Direction.ASC, "id"));
     this.orderItemRepository.deleteAll(orderItens);
     this.purchaseOrderRepository.deleteById(id);
   }
