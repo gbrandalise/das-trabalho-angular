@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidationException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
@@ -53,7 +54,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> findAll(){
-        List<Product> products = this.productRepository.findAll();
+        List<Product> products = this.productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         return products.stream()
             .map(ProductMapper.INSTANCE::toDTO)
             .collect(Collectors.toList());

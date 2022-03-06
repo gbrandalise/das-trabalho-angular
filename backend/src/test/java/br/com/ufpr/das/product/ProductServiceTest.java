@@ -19,6 +19,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest {
@@ -67,7 +68,7 @@ public class ProductServiceTest {
     @Test
     public void testFindAll() {
         List<Product> productEntities = ProductFactory.getList(5, "default");
-        when(productRepository.findAll()).thenReturn(productEntities);
+        when(productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))).thenReturn(productEntities);
         List<ProductDTO> result = service.findAll();
         assertNotNull(result);
         assertEquals(5, result.size());
