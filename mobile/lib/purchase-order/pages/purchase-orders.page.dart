@@ -116,6 +116,13 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                   },
                   onEdit: () => _edit(item),
                   onDelete: () => _confirmDelete(item),
+                  additionalActions: [
+                    IconButton(
+                      onPressed: () => _showItems(item), 
+                      icon: const Icon(Icons.list),
+                      color:Colors.blue
+                    )
+                  ],
                 );
               },
             ),
@@ -166,5 +173,13 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
     await _purchaseOrderService.delete(item.id!);
     LoadingService.hide(context);
     _filter();
+  }
+
+  _showItems(PurchaseOrder item) {
+    Navigator.pushNamed(
+      context, 
+      AppRoutes.PURCHASE_ORDER_ITEMS,
+      arguments: item.id
+    );
   }
 }
