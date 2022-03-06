@@ -5,6 +5,18 @@ class Product {
   String? description;
 
   Product({this.id, this.description});
+  
+  @override
+  bool operator == (dynamic other) =>
+      other != null && other is Product && id == other.id;
+
+  @override
+  int get hashCode {
+		const int prime = 31;
+		int result = super.hashCode;
+		result = prime * result + ((id == null) ? 0 : id.hashCode);
+		return result;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,4 +37,5 @@ class Product {
   String toJson() => jsonEncode(toMap());
 
   static Product fromJson(String json) => Product.fromMap(jsonDecode(json));
+
 }

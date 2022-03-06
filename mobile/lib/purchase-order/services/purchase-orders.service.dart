@@ -35,7 +35,7 @@ class PurchaseOrderService {
 
   Future<PurchaseOrder> save(PurchaseOrder purchaseOrder) async {
     if (purchaseOrder.id != null) {
-      // UPDATE
+      return update(purchaseOrder);
     }
     return create(purchaseOrder);
   }
@@ -52,4 +52,16 @@ class PurchaseOrderService {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
+
+  Future<PurchaseOrder> update(PurchaseOrder purchaseOrder) async {
+    http.Response response = await http.put(
+      Uri.http(Environment.API_URL, '$RESOURCE_URL/${purchaseOrder.id}'),
+      headers: Environment.HEADERS,
+      body: purchaseOrder.toJson()
+    );
+    if (response.statusCode == 200) {
+      return PurchaseOrder.fromJson(utf8.decode(response.bodyBytes));
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }}
 }

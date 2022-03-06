@@ -33,11 +33,10 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   final PurchaseOrderService _purchaseOrderService = PurchaseOrderService();
   final OrderItemService _orderItemService = OrderItemService();
   final ClientService _clientService = ClientService();
-  final ProductService _productService = ProductService();
-
-  final List<OrderItem> _items = [];
+  final ProductService _productService = ProductService();  
   
   PurchaseOrder _order = PurchaseOrder();
+  List<OrderItem> _items = [];
   OrderItem _item = OrderItem();
   List<Client> _clients = [];
   List<Product> _products = [];
@@ -59,6 +58,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    _getArguments();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pedido'),
@@ -80,85 +80,83 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
             key: _formKeyOrder,
             child: Container(
               margin: const EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
-              child: Expanded(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        enabled: false,
-                      ),
-                      controller: _dateController,
-                      style: const TextStyle(
-                        color: Colors.grey
-                      ),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      enabled: false,
                     ),
-                    DropdownButtonFormField(
-                      isExpanded: true,
-                      hint: const Text("Cliente"),
-                      value: _order.client,
-                      validator: (Client? value) => _validateClient(value),
-                      onChanged: (Client? newValue) {
-                        setState(() {
-                          _order.client = newValue;
-                        });
-                      },
-                      items: _clients
-                        .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text('${e.cpf} - ${e.firstName} ${e.lastName}')
-                        ))
-                        .toList(),
+                    controller: _dateController,
+                    style: const TextStyle(
+                      color: Colors.grey
                     ),
-                    Form(
-                      key: _formKeyItem,
-                      child: Column(
-                        children: [
-                          DropdownButtonFormField(
-                            isExpanded: true,
-                            hint: const Text('Produto'),
-                            validator: (Product? value) => _validateProduct(value),
-                            value: _item.product,
-                            onChanged: (Product? newValue) {
-                              setState(() {
-                                _item.product = newValue;
-                              });
-                            },
-                            items: _products
-                              .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e.description!)
-                              ))
-                              .toList(),
-                          ),
-                          Row (
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 120,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                  decoration: const InputDecoration(
-                                    hintText: 'Quantidade'
-                                  ),
-                                  validator: (value) => _validateQuantity(value),
-                                  controller: _quantityController,
+                  ),
+                  DropdownButtonFormField(
+                    isExpanded: true,
+                    hint: const Text("Cliente"),
+                    value: _order.client,
+                    validator: (Client? value) => _validateClient(value),
+                    onChanged: (Client? newValue) {
+                      setState(() {
+                        _order.client = newValue;
+                      });
+                    },
+                    items: _clients
+                      .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text('${e.cpf} - ${e.firstName} ${e.lastName}')
+                      ))
+                      .toList(),
+                  ),
+                  Form(
+                    key: _formKeyItem,
+                    child: Column(
+                      children: [
+                        DropdownButtonFormField(
+                          isExpanded: true,
+                          hint: const Text('Produto'),
+                          validator: (Product? value) => _validateProduct(value),
+                          value: _item.product,
+                          onChanged: (Product? newValue) {
+                            setState(() {
+                              _item.product = newValue;
+                            });
+                          },
+                          items: _products
+                            .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.description!)
+                            ))
+                            .toList(),
+                        ),
+                        Row (
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                decoration: const InputDecoration(
+                                  hintText: 'Quantidade'
                                 ),
+                                validator: (value) => _validateQuantity(value),
+                                controller: _quantityController,
                               ),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  _addProduct();
-                                }, 
-                                label: const Text('Adicionar Produto'),
-                                icon: const Icon(Icons.add),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                _addProduct();
+                              }, 
+                              label: const Text('Adicionar Produto'),
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -246,6 +244,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
         _order = await _purchaseOrderService.save(_order);
         if (_order.id != null) {
           for (var item in _items) {
+            item.id = null;
             item.order = _order;
             await _orderItemService.save(item);
           }
@@ -305,5 +304,26 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
     setState(() {
       _items.remove(item);
     });
+  }
+
+  void _getArguments() {
+    if (_order.id == null) {
+      final args = ModalRoute.of(context)!.settings.arguments;
+      if (args != null) {
+        setState(() {
+          _order = args as PurchaseOrder;
+        });
+        _findOrderItems();
+      }
+    }
+  }
+
+  void _findOrderItems() async {
+    LoadingService.show(context);
+    var result = await _orderItemService.findByOrderId(_order.id!);
+    setState(() {
+      _items = result;
+    });
+    LoadingService.hide(context);
   }
 }

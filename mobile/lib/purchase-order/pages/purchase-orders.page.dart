@@ -103,7 +103,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 120),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final PurchaseOrder item = _list[index];
@@ -114,7 +114,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
                     'CPF Cliente': item.client!.cpf!,
                   },
-                  onEdit: () {},
+                  onEdit: () => _edit(item),
                   onDelete: () {},
                 );
               },
@@ -123,5 +123,14 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
         ],
       ),
     );
+  }
+
+  _edit(PurchaseOrder item) async {
+    await Navigator.pushNamed(
+      context, 
+      AppRoutes.PURCHASE_ORDER_REGISTER, 
+      arguments: item
+    );
+    _filter();
   }
 }
