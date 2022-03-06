@@ -8,6 +8,18 @@ class PurchaseOrder {
   Client? client;
 
   PurchaseOrder({this.id, this.date, this.client});
+  
+  @override
+  bool operator == (dynamic other) =>
+      other != null && other is PurchaseOrder && id == other.id;
+
+  @override
+  int get hashCode {
+		const int prime = 31;
+		int result = super.hashCode;
+		result = prime * result + ((id == null) ? 0 : id.hashCode);
+		return result;
+  }
 
   Map<String, dynamic> toMap() {
     return {
