@@ -4,6 +4,7 @@ import 'package:das_angular_mobile/product/product.model.dart';
 import 'package:das_angular_mobile/product/services/product.service.dart';
 import 'package:flutter/material.dart';
 import '../../common/widgets/list-item-card.widget.dart';
+import '../../routes/app_routes.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -38,7 +39,10 @@ class _ProductsPageState extends State<ProductsPage> {
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          await Navigator.pushNamed(context, AppRoutes.PRODUCT_REGISTER);
+          _findAll();
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(children: [

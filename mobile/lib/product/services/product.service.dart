@@ -18,4 +18,23 @@ class ProductService {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
+
+  Future<Product> save(Product product) async {
+    if (product.id != null) {
+      //UPDATE
+    }
+    return create(product);
+  }
+
+  Future<Product> create(Product product) async {
+    http.Response response = await http.post(
+        Uri.http(Environment.API_URL, PRODUCT_URL),
+        headers: Environment.HEADERS,
+        body: product.toJson());
+    if (response.statusCode == 201) {
+      return Product.fromJson(utf8.decode(response.bodyBytes));
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
 }

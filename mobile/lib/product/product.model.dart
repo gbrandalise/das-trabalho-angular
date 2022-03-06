@@ -14,10 +14,7 @@ class Product {
   }
 
   static Product fromMap(Map<String, dynamic> map) {
-    return Product(
-      id: map['id'], 
-      description: map['description']
-    );
+    return Product(id: map['id'], description: map['description']);
   }
 
   static List<Product> fromJsonList(String json) {
@@ -26,4 +23,6 @@ class Product {
   }
 
   String toJson() => jsonEncode(toMap());
+
+  static Product fromJson(String json) => Product.fromMap(jsonDecode(json));
 }
