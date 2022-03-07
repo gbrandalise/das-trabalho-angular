@@ -22,7 +22,7 @@ class ProductService {
 
   Future<Product> save(Product product) async {
     if (product.id != null) {
-      //UPDATE
+      return update(product);
     }
     return create(product);
   }
@@ -33,6 +33,18 @@ class ProductService {
         headers: Environment.HEADERS,
         body: product.toJson());
     if (response.statusCode == 201) {
+      return Product.fromJson(utf8.decode(response.bodyBytes));
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
+
+  Future<Product> update(Product product) async {
+    http.Response response = await http.put(
+        Uri.http(Environment.API_URL, '$PRODUCT_URL/${product.id}'),
+        headers: Environment.HEADERS,
+        body: product.toJson());
+    if (response.statusCode == 200) {
       return Product.fromJson(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');

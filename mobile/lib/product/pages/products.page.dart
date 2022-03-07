@@ -60,7 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     'Id': item.id.toString(),
                     'Produto': item.description.toString(),
                   },
-                  onEdit: () {},
+                  onEdit: () => _edit(item),
                   onDelete: () => _confirmDelete(item),
                 );
               },
@@ -102,6 +102,12 @@ class _ProductsPageState extends State<ProductsPage> {
     LoadingService.show(context);
     await productsService.delete(product.id!);
     LoadingService.hide(context);
+    _findAll();
+  }
+
+  _edit(Product item) async {
+    await Navigator.pushNamed(context, AppRoutes.PRODUCT_REGISTER,
+        arguments: item);
     _findAll();
   }
 }
