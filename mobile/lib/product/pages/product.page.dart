@@ -30,6 +30,7 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    _getArguments();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Produto'),
@@ -51,19 +52,16 @@ class _ProductPageState extends State<ProductPage> {
               key: _formKeyProduct,
               child: Container(
                 margin: const EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(
-                          enabled: true,
-                          labelText: 'Produto',
-                        ),
-                        style: const TextStyle(color: Colors.grey),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        enabled: true,
+                        labelText: 'Produto',
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -126,5 +124,17 @@ class _ProductPageState extends State<ProductPage> {
             ],
           );
         });
+  }
+
+  void _getArguments() {
+    if (_product.id == null) {
+      final args = ModalRoute.of(context)!.settings.arguments;
+      if (args != null) {
+        setState(() {
+          _product = args as Product;
+          _descriptionController.text = _product.description!;
+        });
+      }
+    }
   }
 }
