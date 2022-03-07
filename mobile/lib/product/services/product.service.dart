@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:das_angular_mobile/product/product.model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:das_angular_mobile/common/environment.dart';
 
@@ -34,6 +35,16 @@ class ProductService {
     if (response.statusCode == 201) {
       return Product.fromJson(utf8.decode(response.bodyBytes));
     } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
+
+  Future<void> delete(int id) async {
+    http.Response response = await http.delete(
+      Uri.https(Environment.API_URL, '$PRODUCT_URL/$id'),
+      headers: Environment.HEADERS,
+    );
+    if (response.statusCode != 200) {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
