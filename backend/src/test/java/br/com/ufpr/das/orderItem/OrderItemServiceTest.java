@@ -17,6 +17,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderItemServiceTest {
@@ -35,7 +36,7 @@ public class OrderItemServiceTest {
   @Test
   public void testFindByOrderId() {
     List<OrderItem> orderItemEntities = OrderItemFactory.getList(5, "default");
-    when(orderItemRepository.findByOrderId(1L)).thenReturn(orderItemEntities);
+    when(orderItemRepository.findByOrderId(1L, Sort.by(Sort.Direction.ASC, "id"))).thenReturn(orderItemEntities);
     List<OrderItemDTO> result = service.findByOrderId(1L);
     assertNotNull(result);
     assertEquals(5, result.size());
@@ -43,7 +44,7 @@ public class OrderItemServiceTest {
 
   @Test
   public void testFindByOrderIdEmptyList() {
-    when(orderItemRepository.findByOrderId(1L)).thenReturn(Collections.emptyList());
+    when(orderItemRepository.findByOrderId(1L, Sort.by(Sort.Direction.ASC, "id"))).thenReturn(Collections.emptyList());
     List<OrderItemDTO> result = service.findByOrderId(1L);
     assertNotNull(result);
     assertTrue(result.isEmpty());

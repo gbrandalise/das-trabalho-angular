@@ -1,3 +1,4 @@
+import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -25,21 +26,21 @@ class Menu extends StatelessWidget {
               title: const Text('Cliente'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/client');
+                Navigator.pushNamed(context, AppRoutes.CLIENT);
               },
             ),
             ListTile(
               title: const Text('Produto'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/product');
+                Navigator.pushNamed(context, AppRoutes.PRODUCT);
               },
             ),
             ListTile(
               title: const Text('Pedido'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/purchase-order');
+                Navigator.pushNamed(context, AppRoutes.PURCHASE_ORDER);
               },
             ),
           ],

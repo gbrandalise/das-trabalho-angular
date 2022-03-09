@@ -19,6 +19,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 
 import br.com.ufpr.das.client.ClientDTOFactory;
 import br.com.ufpr.das.orderItem.OrderItemRepository;
@@ -65,7 +66,7 @@ public class PurchaseOrderServiceTest {
   @Test
     public void testFindAll() {
         List<PurchaseOrder> purchaseOrderEntities = PurchaseOrderFactory.getList(5, "default");
-        when(purchaseOrderRepository.findAll()).thenReturn(purchaseOrderEntities);
+        when(purchaseOrderRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))).thenReturn(purchaseOrderEntities);
         List<PurchaseOrderDTO> result = service.findAll();
         assertNotNull(result);
         assertEquals(5, result.size());
@@ -101,7 +102,7 @@ public class PurchaseOrderServiceTest {
   @Test
   public void testFindByClientCpf() {
     List<PurchaseOrder> purchaseOrderEntities = PurchaseOrderFactory.getList(5, "default");
-    when(purchaseOrderRepository.findByClientCpf("99999999999")).thenReturn(purchaseOrderEntities);
+    when(purchaseOrderRepository.findByClientCpf("99999999999", Sort.by(Sort.Direction.ASC, "id"))).thenReturn(purchaseOrderEntities);
     List<PurchaseOrderDTO> result = service.findByClientCpf("99999999999");
     assertNotNull(result);
     assertEquals(5, result.size());
@@ -109,7 +110,7 @@ public class PurchaseOrderServiceTest {
 
   @Test
   public void testFindByClientCpfEmptyList() {
-    when(purchaseOrderRepository.findByClientCpf("99999999999")).thenReturn(Collections.emptyList());
+    when(purchaseOrderRepository.findByClientCpf("99999999999", Sort.by(Sort.Direction.ASC, "id"))).thenReturn(Collections.emptyList());
     List<PurchaseOrderDTO> result = service.findByClientCpf("99999999999");
     assertNotNull(result);
     assertTrue(result.isEmpty());

@@ -8,8 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
@@ -20,6 +20,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientServiceTest {
@@ -59,7 +60,7 @@ public class ClientServiceTest {
     @Test
     public void testFindAll() {
         List<Client> clientEntities = ClientFactory.getList(5, "default");
-        when(clientRepository.findAll()).thenReturn(clientEntities);
+        when(clientRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))).thenReturn(clientEntities);
         List<ClientDTO> result = service.findAll();
         assertNotNull(result);
         assertEquals(5, result.size());

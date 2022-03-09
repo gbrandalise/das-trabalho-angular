@@ -1,8 +1,10 @@
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/purchase-order/purchase-order.model.dart';
 import 'package:das_angular_mobile/purchase-order/services/purchase-orders.service.dart';
+import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +21,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   final _formKey = GlobalKey<FormState>();
   final _cpfController = TextEditingController();
 
-  final PurchaseOrderService purchaseOrderService = PurchaseOrderService();
+  final PurchaseOrderService _purchaseOrderService = PurchaseOrderService();
 
   List<PurchaseOrder> _list = [];
 
@@ -36,19 +38,23 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   }
 
   _findAll() async {
-    List<PurchaseOrder> result = await purchaseOrderService.findAll();
+    LoadingService.show(context);
+    List<PurchaseOrder> result = await _purchaseOrderService.findAll();
     setState(() {
       _list = result;
+      LoadingService.hide(context);
     });
   }
 
   _filter() async {
     String cpf = _cpfController.text;
     if (cpf.trim() != '') {
-      List<PurchaseOrder> result = await purchaseOrderService.findByClientCpf(cpf);
+      LoadingService.show(context);
+      List<PurchaseOrder> result = await _purchaseOrderService.findByClientCpf(cpf);
       setState(() {
         _list = result;
       });
+      LoadingService.hide(context);
     } else {
       _findAll();
     }
@@ -58,11 +64,14 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Purchase Order'),
+        title: const Text('Pedido'),
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { },
+        onPressed: () async {
+          await Navigator.pushNamed(context, AppRoutes.PURCHASE_ORDER_REGISTER);
+          _filter();
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -94,7 +103,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 120),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final PurchaseOrder item = _list[index];
@@ -103,15 +112,74 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                     'Id': item.id.toString(),
                     'Data': DateFormat('dd/MM/yyyy').format(item.date!),
                     'Cliente': '${item.client!.firstName!} ${item.client!.lastName!}',
+                    'CPF Cliente': item.client!.cpf!,
                   },
-                  onEdit: () {},
-                  onDelete: () {},
+                  onEdit: () => _edit(item),
+                  onDelete: () => _confirmDelete(item),
+                  additionalActions: [
+                    IconButton(
+                      onPressed: () => _showItems(item), 
+                      icon: const Icon(Icons.list),
+                      color:Colors.blue
+                    )
+                  ],
                 );
               },
             ),
           ),
         ],
       ),
+    );
+  }
+
+  _edit(PurchaseOrder item) async {
+    await Navigator.pushNamed(
+      context, 
+      AppRoutes.PURCHASE_ORDER_REGISTER, 
+      arguments: item
+    );
+    _filter();
+  }
+
+  _confirmDelete(PurchaseOrder item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Pedido"),
+          content: const Text("Deseja realmente excluir o pedido?"),
+          actions: [
+            TextButton(
+              child: const Text("Sim"),
+              onPressed: () {
+                Navigator.pop(context);
+                _delete(item);
+              }
+            ),
+            TextButton(
+              child: const Text("Não"),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            )
+          ]
+        );
+      }
+    );
+  }
+
+  _delete(PurchaseOrder item) async {
+    LoadingService.show(context);
+    await _purchaseOrderService.delete(item.id!);
+    LoadingService.hide(context);
+    _filter();
+  }
+
+  _showItems(PurchaseOrder item) {
+    Navigator.pushNamed(
+      context, 
+      AppRoutes.PURCHASE_ORDER_ITEMS,
+      arguments: item.id
     );
   }
 }

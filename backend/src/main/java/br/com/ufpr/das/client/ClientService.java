@@ -11,6 +11,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.ValidationException;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
@@ -66,7 +67,7 @@ public class ClientService {
     }
 
     public List<ClientDTO> findAll() {
-        List<Client> clients = this.clientRepository.findAll();
+        List<Client> clients = this.clientRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         return clients.stream()
             .map(ClientMapper.INSTANCE::toDTO)
             .collect(Collectors.toList());
