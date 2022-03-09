@@ -30,6 +30,13 @@ class _ClientPageState extends State<ClientPage> {
     });
   }
 
+  // void remove(int id) async{
+  //   try {
+  //     ClientService clients = ClientService();
+  //     await clients.remove(id);
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
