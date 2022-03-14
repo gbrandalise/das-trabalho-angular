@@ -1,5 +1,5 @@
-import 'package:das_angular_mobile/client/pages/client.page.dart';
-import 'package:das_angular_mobile/client/pages/clients.page.dart';
+import 'package:das_angular_mobile/client/pages/client-orders/client.page.dart';
+import 'package:das_angular_mobile/client/pages/client-orders/clients.page.dart';
 import 'package:das_angular_mobile/home/home.page.dart';
 import 'package:das_angular_mobile/product/pages/product.page.dart';
 import 'package:das_angular_mobile/product/pages/products.page.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.HOME: (_) => const HomePage(),
         AppRoutes.CLIENT: (_) => const ClientsPage(),
-        AppRoutes.CLIENT_REGISTER: (_) => const ClientPage(),
+        AppRoutes.CLIENT_REGISTER: (_) => ClientPage(),
         AppRoutes.PRODUCT: (_) => const ProductsPage(),
         AppRoutes.PRODUCT_REGISTER: (_) => const ProductPage(),
         AppRoutes.PURCHASE_ORDER: (_) => const PurchaseOrdersPage(),
