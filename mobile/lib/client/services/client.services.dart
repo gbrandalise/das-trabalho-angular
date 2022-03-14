@@ -13,7 +13,7 @@ class ClientService {
         Uri.http(Environment.API_URL, CLIENT_URL),
         headers: Environment.HEADERS);
     if (response.statusCode == 200) {
-      return Client.fromJsonList(response.body);
+      return Client.fromJsonList(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
@@ -40,11 +40,11 @@ class ClientService {
 
   Future<Client> update(Client client) async {
     http.Response response = await http.put(
-        Uri.http(Environment.API_URL, '${CLIENT_URL}/${client.id}'),
+        Uri.http(Environment.API_URL, '$CLIENT_URL/${client.id}'),
         headers: Environment.HEADERS,
         body: client.toJson());
     if (response.statusCode == 200) {
-      return client;
+      return Client.fromJson(utf8.decode(response.bodyBytes));
     } else {
       throw Exception('Error code: ${response.statusCode}');
     }
@@ -52,11 +52,9 @@ class ClientService {
 
   Future<void> delete(int id) async {
     final http.Response response = await http.delete(
-        Uri.http(Environment.API_URL, '${CLIENT_URL}/$id'),
+        Uri.http(Environment.API_URL, '$CLIENT_URL/$id'),
         headers: Environment.HEADERS);
-    if (response.statusCode == 200) {
-      Client.fromJson(response.body);
-    } else {
+    if (response.statusCode != 200) {
       throw Exception('Error code: ${response.statusCode}');
     }
   }

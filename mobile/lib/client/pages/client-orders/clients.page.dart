@@ -26,10 +26,12 @@ class _ClientsPageState extends State<ClientsPage> {
   }
 
   _findAll() async {
+    LoadingService.show(context);
     List<Client> result = await clientService.findAll();
     setState(() {
       _list = result;
     });
+    LoadingService.hide(context);
   }
 
   @override
@@ -48,7 +50,7 @@ class _ClientsPageState extends State<ClientsPage> {
         const PageTitle('Lista de Clientes'),
         Expanded(
           child: ListView.builder(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 100),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 120),
               itemCount: _list.length,
               itemBuilder: (context, index) {
                 final Client client = _list[index];
@@ -94,12 +96,11 @@ class _ClientsPageState extends State<ClientsPage> {
     );
   }
 
-
   _delete(Client client) async {
     LoadingService.show(context);
     await clientService.delete(client.id!);
-    _findAll();
     LoadingService.hide(context);
+    _findAll();
   }
 
   _edit(Client client) async {
