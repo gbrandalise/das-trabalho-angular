@@ -50,4 +50,14 @@ class ClientService {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
+
+  Future<void> delete(int id) async {
+    http.Response response = await http.delete(
+      Uri.https(Environment.API_URL, '$CLIENT_URL/$id'),
+      headers: Environment.HEADERS,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
 }
