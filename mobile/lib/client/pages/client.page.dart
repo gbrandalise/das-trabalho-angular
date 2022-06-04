@@ -2,8 +2,8 @@ import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer';
-import 'package:flutter/foundation.dart';
+
+import '../services/client.services.dart';
 
 class ClientPage extends StatefulWidget {
 
@@ -75,11 +75,8 @@ class _ClientPageState extends State<ClientPage> {
     );
   }
 
-  // todo: validar campos
-  // todo: validar cpf
   // todo: se estiver tudo ok manda
-  // todo: se estiver com problema exibe um AlertDialog
-  void _save() {
+  void _save() async {
     if(_isFormValid()) {
       print('Yolo!');
       showDialog(
@@ -100,23 +97,7 @@ class _ClientPageState extends State<ClientPage> {
         },
       );
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Produto"),
-            content: const Text("Ops, encontramos um erro no seu formulário."),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
+      _handleError();
     }
   }
 
@@ -124,5 +105,25 @@ class _ClientPageState extends State<ClientPage> {
     return CPFValidator.isValid(_cpfController.text) &&
       !_firstNameController.text.isEmpty &&
       !_lastNameController.text.isEmpty;
+  }
+
+  void _handleError () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Produto"),
+          content: const Text("Ops, encontramos um erro no seu formulário."),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
