@@ -69,4 +69,9 @@ class _ClientPageState extends State<ClientPage> {
       )
     );
   }
+  bool _isFormValid() {
+    return CPFValidator.isValid(_cpfController.text) &&
+      !_firstNameController.text.isEmpty &&
+      !_lastNameController.text.isEmpty;
+  }
 }
