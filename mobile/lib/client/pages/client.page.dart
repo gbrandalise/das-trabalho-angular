@@ -3,6 +3,7 @@ import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:das_angular_mobile/routes/app_routes.dart';
 
 import '../services/client.services.dart';
 import '../client.model.dart';
@@ -92,6 +93,7 @@ class _ClientPageState extends State<ClientPage> {
         LoadingService.hide(context);
       }
 
+      _redirectList();
     } else {
       _handleError();
     }
@@ -121,5 +123,24 @@ class _ClientPageState extends State<ClientPage> {
         );
       },
     );
+  }
+
+  void _redirectList() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Cliente'),
+          content: const Text('Cliente salvo com sucesso'),
+          actions: [
+            TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.popUntil(
+                      context, ModalRoute.withName(AppRoutes.CLIENT));
+                })
+          ],
+        );
+      });
   }
 }
