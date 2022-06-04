@@ -88,12 +88,32 @@ class _ClientPageState extends State<ClientPage> {
         _client.firstName = _firstNameController.text;
         _client.lastName = _lastNameController.text;
         _client.cpf = _cpfController.text;
-        _client = await _clientService.save(_client);
-      } finally {
-        LoadingService.hide(context);
+        _client = await _clientService.create(_client, context);
+        _redirectList();
+      } catch(e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Cliente"),
+              content: const Text("Ops, houve um erro. Tente novamente mais tarde."),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
+      // } finally {
+      //   // LoadingService.hide(context);
+      // }1
 
-      _redirectList();
+      //
     } else {
       _handleError();
     }
