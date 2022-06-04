@@ -19,4 +19,35 @@ class ClientService {
       throw Exception('Error code: ${response.statusCode}');
     }
   }
+
+  Future<Client> save(Client client) async {
+    if (client.id != null) {
+      return update(client);
+    }
+    return create(client);
+  }
+
+  Future<Client> create(Client client) async {
+    http.Response response = await http.post(
+        Uri.http(Environment.API_URL, CLIENT_URL),
+        headers: Environment.HEADERS,
+        body: client.toJson());
+    if (response.statusCode == 201) {
+      return Client.fromJson(utf8.decode(response.bodyBytes));
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
+
+  Future<Client> update(Client client) async {
+    http.Response response = await http.put(
+        Uri.http(Environment.API_URL, '$CLIENT_URL/${client.id}'),
+        headers: Environment.HEADERS,
+        body: client.toJson());
+    if (response.statusCode == 200) {
+      return Client.fromJson(utf8.decode(response.bodyBytes));
+    } else {
+      throw Exception('Error code: ${response.statusCode}');
+    }
+  }
 }
