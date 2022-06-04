@@ -1,6 +1,9 @@
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
 
 class ClientPage extends StatefulWidget {
 
@@ -26,7 +29,9 @@ class _ClientPageState extends State<ClientPage> {
           IconButton(
             icon: const Icon(Icons.save),
             iconSize: 40,
-            onPressed: () {},
+            onPressed: () {
+              _save();
+            },
           )
         ],
       ),
@@ -69,6 +74,52 @@ class _ClientPageState extends State<ClientPage> {
       )
     );
   }
+
+  // todo: validar campos
+  // todo: validar cpf
+  // todo: se estiver tudo ok manda
+  // todo: se estiver com problema exibe um AlertDialog
+  void _save() {
+    if(_isFormValid()) {
+      print('Yolo!');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Produto"),
+            content: const Text("Validação passou!"),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Produto"),
+            content: const Text("Ops, encontramos um erro no seu formulário."),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   bool _isFormValid() {
     return CPFValidator.isValid(_cpfController.text) &&
       !_firstNameController.text.isEmpty &&
