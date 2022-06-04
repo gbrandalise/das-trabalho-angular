@@ -1,9 +1,11 @@
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../services/client.services.dart';
+import '../client.model.dart';
 
 class ClientPage extends StatefulWidget {
 
@@ -19,6 +21,10 @@ class _ClientPageState extends State<ClientPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _cpfController = TextEditingController();
+
+  final ClientService _clientService = ClientService();
+
+  Client _client = Client();
 
   @override
   Widget build(BuildContext context) {
@@ -75,27 +81,17 @@ class _ClientPageState extends State<ClientPage> {
     );
   }
 
-  // todo: se estiver tudo ok manda
   void _save() async {
     if(_isFormValid()) {
-      print('Yolo!');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Produto"),
-            content: const Text("Validação passou!"),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
+      try {
+        _client.firstName = _firstNameController.text;
+        _client.lastName = _lastNameController.text;
+        _client.cpf = _cpfController.text;
+        _client = await _clientService.save(_client);
+      } finally {
+        LoadingService.hide(context);
+      }
+
     } else {
       _handleError();
     }
