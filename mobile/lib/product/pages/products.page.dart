@@ -100,9 +100,32 @@ class _ProductsPageState extends State<ProductsPage> {
 
   _delete(Product product) async {
     LoadingService.show(context);
-    await productsService.delete(product.id!);
-    LoadingService.hide(context);
-    _findAll();
+    try{
+      await productsService.delete(product.id!);
+      LoadingService.hide(context);
+      _findAll();
+    }catch(e) {
+      LoadingService.hide(context);
+      String error = "Ocorreu um erro ao deletar o produto. " + e.toString();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Opss"),
+            content: Text(error),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    
   }
 
   _edit(Product item) async {
