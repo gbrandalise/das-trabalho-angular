@@ -8,6 +8,8 @@ import 'package:das_angular_mobile/routes/app_routes.dart';
 import '../services/client.services.dart';
 import '../client.model.dart';
 
+import 'dart:developer' as developer;
+
 class ClientPage extends StatefulWidget {
 
   const ClientPage({Key? key}) : super(key: key);
@@ -29,6 +31,7 @@ class _ClientPageState extends State<ClientPage> {
 
   @override
   Widget build(BuildContext context) {
+     _getArguments();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cadastro de Cliente"),
@@ -85,10 +88,11 @@ class _ClientPageState extends State<ClientPage> {
   void _save() async {
     if(_isFormValid()) {
       try {
+
         _client.firstName = _firstNameController.text;
         _client.lastName = _lastNameController.text;
         _client.cpf = _cpfController.text;
-        _client = await _clientService.create(_client, context);
+        _client = await _clientService.save(_client, context);
         _redirectList();
       } catch(e) {
         showDialog(
@@ -109,11 +113,6 @@ class _ClientPageState extends State<ClientPage> {
           },
         );
       }
-      // } finally {
-      //   // LoadingService.hide(context);
-      // }1
-
-      //
     } else {
       _handleError();
     }
@@ -162,5 +161,19 @@ class _ClientPageState extends State<ClientPage> {
           ],
         );
       });
+  }
+
+  void _getArguments() {
+    if (_client.id == null) {
+      final args = ModalRoute.of(context)!.settings.arguments;
+      if (args != null) {
+        setState(() {
+          _client = args as Client;
+          _firstNameController.text = _client.firstName!;
+          _lastNameController.text = _client.lastName!;
+          _cpfController.text = _client.cpf!;
+        });
+      }
+    }
   }
 }
