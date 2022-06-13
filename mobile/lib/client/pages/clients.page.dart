@@ -57,7 +57,7 @@ class _ClientsPageState extends State<ClientsPage> {
                   'Ultimo Nome': client.lastName.toString(),
                   'CPF': client.cpf.toString(),
                 },
-                onEdit: () {},
+                onEdit: () => _edit(client),
                 onDelete: () {
                   _confirmDelete(client);
                 },
@@ -117,6 +117,12 @@ class _ClientsPageState extends State<ClientsPage> {
           );
       });
     }
+    _findAll();
+  }
+
+  _edit(Client client) async {
+    await Navigator.pushNamed(context, AppRoutes.CLIENT_REGISTER,
+        arguments: client);
     _findAll();
   }
 }

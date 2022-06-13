@@ -25,7 +25,7 @@ class ClientService {
 
   Future<Client> save(Client client, BuildContext context) async {
     if (client.id != null) {
-      return update(client);
+      return update(client, context);
     }
     return create(client, context);
   }
@@ -44,11 +44,13 @@ class ClientService {
     }
   }
 
-  Future<Client> update(Client client) async {
+  Future<Client> update(Client client, BuildContext context) async {
+    LoadingService.show(context);
     http.Response response = await http.put(
         Uri.http(Environment.API_URL, '$CLIENT_URL/${client.id}'),
         headers: Environment.HEADERS,
         body: client.toJson());
+    LoadingService.hide(context);
     if (response.statusCode == 200) {
       return Client.fromJson(utf8.decode(response.bodyBytes));
     } else {
