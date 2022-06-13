@@ -56,6 +56,7 @@ class _ProductPageState extends State<ProductPage> {
                   children: [
                     TextFormField(
                       controller: _descriptionController,
+                      validator: (value) => _validateNotEmtpty(value, 'Descrição do Produto'),
                       decoration: const InputDecoration(
                         enabled: true,
                         labelText: 'Produto',
@@ -69,61 +70,44 @@ class _ProductPageState extends State<ProductPage> {
         ));
   }
 
+  String? _validateNotEmtpty(String? value, String field) {
+    if (value == null 
+        || value == '') {
+      return '$field inválido!';
+    }
+    return null;
+  }
+
   void _save() async {
-    if (_validateDescription()) {
+    if (_formKeyProduct.currentState!.validate()) {
       try {
+        LoadingService.show(context);
         _product.description = _descriptionController.text;
         _product = await _productsService.save(_product);
       } finally {
         LoadingService.hide(context);
+        _redirectList();
       }
-
-      _redirectList();
     }
-  }
-
-  bool _validateDescription() {
-    if (_formKeyProduct.currentState!.validate() &&
-        _descriptionController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Produto"),
-            content: const Text("Por favor adicionar descrição do produto."),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    }
-    return true;
   }
 
   void _redirectList() {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Produto'),
-            content: const Text('Produto salvo com sucesso'),
-            actions: [
-              TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.popUntil(
-                        context, ModalRoute.withName(AppRoutes.PRODUCT));
-                  })
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Produto'),
+          content: const Text('Produto salvo com sucesso'),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.popUntil(
+                  context, ModalRoute.withName(AppRoutes.PRODUCT));
+              })
+          ],
+        );
+      });
   }
 
   void _getArguments() {
