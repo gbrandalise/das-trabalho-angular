@@ -26,10 +26,12 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   _findAll() async {
+    LoadingService.show(context);
     List<Product> result = await productsService.findAll();
     setState(() {
       _list = result;
     });
+    LoadingService.hide(context);
   }
 
   @override

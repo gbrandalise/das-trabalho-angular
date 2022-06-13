@@ -10,7 +10,7 @@ class LoadingService {
         builder: (BuildContext context) {
           return const Dialog(
             backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.all(150),
+            insetPadding: EdgeInsets.all(170),
             child: SizedBox(
               child: CircularProgressIndicator(),
               height: 60,

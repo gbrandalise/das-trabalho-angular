@@ -1,14 +1,12 @@
-import 'package:das_angular_mobile/common/services/loading.service.dart';
-import 'package:das_angular_mobile/menu/menu.component.dart';
-import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
-import 'package:flutter/material.dart';
+import 'package:das_angular_mobile/common/exception/http-exception.dart';
+import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
+import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/routes/app_routes.dart';
+import 'package:flutter/material.dart';
 
-import '../services/client.services.dart';
 import '../client.model.dart';
-
-import 'dart:developer' as developer;
+import '../services/client.services.dart';
 
 class ClientPage extends StatefulWidget {
 
@@ -57,6 +55,7 @@ class _ClientPageState extends State<ClientPage> {
                 children: [
                   TextFormField(
                     controller: _firstNameController,
+                    validator: (value) => _validateNotEmtpty(value, 'Nome'),
                     decoration: const InputDecoration(
                       enabled: true,
                       labelText: 'Nome',
@@ -64,6 +63,7 @@ class _ClientPageState extends State<ClientPage> {
                   ),
                   TextFormField(
                     controller: _lastNameController,
+                    validator: (value) => _validateNotEmtpty(value, 'Sobrenome'),
                     decoration: const InputDecoration(
                       enabled: true,
                       labelText: 'Sobrenome',
@@ -71,6 +71,7 @@ class _ClientPageState extends State<ClientPage> {
                   ),
                   TextFormField(
                     controller: _cpfController,
+                    validator: (value) => _validateCpf(value),
                     decoration: const InputDecoration(
                       enabled: true,
                       labelText: 'CPF',
@@ -85,52 +86,64 @@ class _ClientPageState extends State<ClientPage> {
     );
   }
 
-  void _save() async {
-    if(_isFormValid()) {
-      try {
+  String? _validateNotEmtpty(String? value, String field) {
+    if (value == null 
+        || value == '') {
+      return '$field inválido!';
+    }
+    return null;
+  }
 
+  String? _validateCpf(String? value) {
+    if (_validateNotEmtpty(value, 'CPF') == null) {
+      if (!CPFValidator.isValid(value)) {
+        return 'CPF inválido!';
+      }
+    }
+    return null;
+  }
+
+  void _save() async {
+    if (_formKeyClient.currentState!.validate()) {
+      try {
         _client.firstName = _firstNameController.text;
         _client.lastName = _lastNameController.text;
         _client.cpf = _cpfController.text;
         _client = await _clientService.save(_client, context);
         _redirectList();
-      } catch(e) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Cliente"),
-              content: const Text("Ops, houve um erro. Tente novamente mais tarde."),
-              actions: [
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          },
-        );
+      } on HttpException catch(e) {
+        if (e.statusCode == 412) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Cliente"),
+                content: const Text("CPF já cadastrado."),
+                actions: [
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {
+        _handleError();
       }
-    } else {
-      _handleError();
     }
   }
 
-  bool _isFormValid() {
-    return CPFValidator.isValid(_cpfController.text) &&
-      !_firstNameController.text.isEmpty &&
-      !_lastNameController.text.isEmpty;
-  }
-
-  void _handleError () {
+  void _handleError() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Produto"),
-          content: const Text("Ops, encontramos um erro no seu formulário."),
+          title: const Text("Cliente"),
+          content: const Text("Ops, houve um erro. Tente novamente mais tarde."),
           actions: [
             TextButton(
               child: const Text("OK"),
@@ -153,11 +166,11 @@ class _ClientPageState extends State<ClientPage> {
           content: const Text('Cliente salvo com sucesso'),
           actions: [
             TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.popUntil(
-                      context, ModalRoute.withName(AppRoutes.CLIENT));
-                })
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName(AppRoutes.CLIENT));
+              })
           ],
         );
       });

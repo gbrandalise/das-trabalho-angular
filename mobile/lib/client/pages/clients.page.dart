@@ -1,12 +1,11 @@
 import 'package:das_angular_mobile/client/client.model.dart';
-import 'package:das_angular_mobile/client/pages/client.page.dart';
 import 'package:das_angular_mobile/client/services/client.services.dart';
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/list-item-card.widget.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import '../../common/services/loading.service.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({Key? key}) : super(key: key);
@@ -26,10 +25,12 @@ class _ClientsPageState extends State<ClientsPage> {
   }
 
   _findAll() async {
+    LoadingService.show(context);
     List<Client> result = await clientService.findAll();
     setState(() {
       _list = result;
     });
+    LoadingService.hide(context);
   }
 
   @override
@@ -40,7 +41,10 @@ class _ClientsPageState extends State<ClientsPage> {
       ),
       drawer: const Menu(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.CLIENT_REGISTER),
+        onPressed: () async {
+          await Navigator.pushNamed(context, AppRoutes.CLIENT_REGISTER);
+          _findAll();
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(children: [
@@ -69,7 +73,7 @@ class _ClientsPageState extends State<ClientsPage> {
     );
   }
 
-  _confirmDelete(Client cleint) {
+  _confirmDelete(Client client) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -81,7 +85,7 @@ class _ClientsPageState extends State<ClientsPage> {
               child: const Text("Sim"),
               onPressed: () {
                 Navigator.pop(context);
-                _delete(cleint);
+                _delete(client);
               },
             ),
             TextButton(
@@ -98,8 +102,12 @@ class _ClientsPageState extends State<ClientsPage> {
 
   _delete(Client client) async {
     try {
-      await clientService.delete(client.id!, context);
+      LoadingService.show(context);
+      await clientService.delete(client.id!);
+      LoadingService.hide(context);
+      _findAll();
     } catch(e) {
+      LoadingService.hide(context);
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -117,7 +125,6 @@ class _ClientsPageState extends State<ClientsPage> {
           );
       });
     }
-    _findAll();
   }
 
   _edit(Client client) async {

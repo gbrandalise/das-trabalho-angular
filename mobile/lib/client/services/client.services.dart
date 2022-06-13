@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:das_angular_mobile/client/client.model.dart';
 import 'package:das_angular_mobile/common/environment.dart';
+import 'package:das_angular_mobile/common/exception/http-exception.dart';
 import '../../common/services/loading.service.dart';
 
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class ClientService {
     if (response.statusCode == 200) {
       return Client.fromJsonList(utf8.decode(response.bodyBytes));
     } else {
-      throw Exception('Error code: ${response.statusCode}');
+      throw HttpException(response.statusCode, 'Error code: ${response.statusCode}');
     }
   }
 
@@ -40,7 +41,7 @@ class ClientService {
     if (response.statusCode == 201) {
       return Client.fromJson(utf8.decode(response.bodyBytes));
     } else {
-      throw Exception('Error code: ${response.statusCode}');
+      throw HttpException(response.statusCode, 'Error code: ${response.statusCode}');
     }
   }
 
@@ -54,19 +55,17 @@ class ClientService {
     if (response.statusCode == 200) {
       return Client.fromJson(utf8.decode(response.bodyBytes));
     } else {
-      throw Exception('Error code: ${response.statusCode}');
+      throw HttpException(response.statusCode, 'Error code: ${response.statusCode}');
     }
   }
 
-  Future<void> delete(int id, BuildContext context) async {
-    LoadingService.show(context);
+  Future<void> delete(int id) async {
     http.Response response = await http.delete(
       Uri.https(Environment.API_URL, '$CLIENT_URL/$id'),
       headers: Environment.HEADERS,
     );
-    LoadingService.hide(context);
     if (response.statusCode != 200) {
-      throw Exception('Error code: ${response.statusCode}');
+      throw HttpException(response.statusCode, 'Error code: ${response.statusCode}');
     }
   }
 }
