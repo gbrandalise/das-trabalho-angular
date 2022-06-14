@@ -168,7 +168,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                 final OrderItem item = _items[index];
                 return ListItemCard(
                   {
-                    'Product': item.product!.description!,
+                    'Produto': item.product!.description!,
                     'Quantidade': item.quantity.toString(),
                   },
                   onDelete: () {

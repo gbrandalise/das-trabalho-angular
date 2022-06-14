@@ -1,5 +1,6 @@
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:das_angular_mobile/common/exception/http-exception.dart';
+import 'package:das_angular_mobile/common/services/loading.service.dart';
 import 'package:das_angular_mobile/common/widgets/page-title.widget.dart';
 import 'package:das_angular_mobile/menu/menu.component.dart';
 import 'package:das_angular_mobile/routes/app_routes.dart';
@@ -95,12 +96,13 @@ class _ClientPageState extends State<ClientPage> {
   }
 
   String? _validateCpf(String? value) {
-    if (_validateNotEmtpty(value, 'CPF') == null) {
+    String? result = _validateNotEmtpty(value, 'CPF');
+    if (result == null) {
       if (!CPFValidator.isValid(value)) {
-        return 'CPF inválido!';
+        result = 'CPF inválido!';
       }
     }
-    return null;
+    return result;
   }
 
   void _save() async {
@@ -109,7 +111,8 @@ class _ClientPageState extends State<ClientPage> {
         _client.firstName = _firstNameController.text;
         _client.lastName = _lastNameController.text;
         _client.cpf = _cpfController.text;
-        _client = await _clientService.save(_client, context);
+        LoadingService.show(context);
+        _client = await _clientService.save(_client);
         _redirectList();
       } on HttpException catch(e) {
         if (e.statusCode == 412) {
@@ -133,6 +136,8 @@ class _ClientPageState extends State<ClientPage> {
         }
       } catch (e) {
         _handleError();
+      } finally {
+        LoadingService.hide(context);
       }
     }
   }
@@ -169,7 +174,7 @@ class _ClientPageState extends State<ClientPage> {
               child: const Text("OK"),
               onPressed: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName(AppRoutes.CLIENT));
+                  context, ModalRoute.withName(AppRoutes.CLIENT));
               })
           ],
         );

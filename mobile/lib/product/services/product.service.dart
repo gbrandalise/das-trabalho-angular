@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:das_angular_mobile/product/product.model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:das_angular_mobile/common/environment.dart';
+import 'package:das_angular_mobile/product/product.model.dart';
+import 'package:http/http.dart' as http;
 
 class ProductService {
   // ignore: constant_identifier_names
